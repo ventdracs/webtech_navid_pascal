@@ -1,0 +1,40 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  height: 100vh;
+  margin: 0;
+  color: #1f2328;
+  font-family: "HTWBerlin", system-ui, -apple-system, 'Segoe UI', sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+header {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem 3rem;
+  align-items: center;
+  padding: 1rem;
+  background-color: #ebebeb;
+  border-bottom: 1px solid #d8d8d8;
+}
+
+header .logo {
+  max-height: 3rem;
+}
+
+header h1 {
+  font-weight: 400;
+}
+
+main {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
