@@ -33,12 +33,11 @@ header .logo {
 header h1 {
   font-weight: 400;
 }
-
+main h2 {
+  color: pink
+}
 main {
   display: flex;
   justify-content: center;
   align-items: center;
-}
-h2 {
-    color: pink;
 }
