@@ -26,7 +26,8 @@ header {
 }
 
 header .logo {
-  max-height: 4rem;
+  max-height: auto;
+  max-width: 4rem;
 }
 
 header h1 {
