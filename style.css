@@ -55,7 +55,6 @@ header h1 {
 .person-image {
   width: 100%;
   height: auto;
-  border-radius: 100%;
   max-width: 120px;
   margin-bottom: 1rem;
 }
