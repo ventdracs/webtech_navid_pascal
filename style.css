@@ -39,3 +39,6 @@ main {
   justify-content: center;
   align-items: center;
 }
+h2 {
+    color: pink;
+}
