@@ -33,12 +33,7 @@ header .logo {
 header h1 {
   font-weight: 400;
 }
-/*
-main {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
+/* Style für PLP
 */
 .people-grid {
   display: grid;
@@ -85,6 +80,52 @@ main {
 }
 
 .detail-link:hover {
+  background-color: #005bb5;
+}
+/* Style für PDP
+*/
+.person-detail {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem;
+  text-align: center;
+}
+
+.person-image-large {
+  width: 200px;
+  height: auto;
+  border-radius: 50%;
+  margin-bottom: 1.5rem;
+}
+
+.person-detail h2 {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+.person-detail ul {
+  list-style: none;
+  padding: 0;
+  margin: 1rem 0;
+}
+
+.person-detail li {
+  font-size: 1.25rem;
+  margin: 0.5rem 0;
+}
+
+.back-link {
+  display: inline-block;
+  margin-top: 1.5rem;
+  padding: 0.5rem 1rem;
+  background-color: #0073e6;
+  color: #fff;
+  text-decoration: none;
+  border-radius: 4px;
+}
+
+.back-link:hover {
   background-color: #005bb5;
 }
 
