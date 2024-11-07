@@ -9,7 +9,7 @@ body {
   grid-template-rows: auto 1fr;
   height: 100vh;
   margin: 0;
-  color: aqua;
+  color: black;
   font-family: "HTWBerlin", system-ui, -apple-system, 'Segoe UI', sans-serif;
   font-size: 16px;
   line-height: 1.5;
