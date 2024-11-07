@@ -33,13 +33,13 @@ header .logo {
 header h1 {
   font-weight: 400;
 }
-
+/*
 main {
   display: flex;
   justify-content: center;
   align-items: center;
 }
-
+*/
 .people-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
