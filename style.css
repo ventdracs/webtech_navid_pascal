@@ -39,3 +39,52 @@ main {
   justify-content: center;
   align-items: center;
 }
+
+.people-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 1.5rem;
+  padding: 1rem;
+}
+
+.person-card {
+  background-color: #f8f8f8;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  padding: 1rem;
+}
+
+.person-image {
+  width: 100%;
+  height: auto;
+  border-radius: 50%;
+  max-width: 120px;
+  margin-bottom: 1rem;
+}
+
+.person-info h2 {
+  font-size: 1.25rem;
+  margin-bottom: 0.5rem;
+}
+
+.person-info p {
+  margin: 0.25rem 0;
+}
+
+.detail-link {
+  display: inline-block;
+  margin-top: 1rem;
+  padding: 0.5rem 1rem;
+  background-color: #0073e6;
+  color: #fff;
+  text-decoration: none;
+  border-radius: 4px;
+}
+
+.detail-link:hover {
+  background-color: #005bb5;
+}
+
