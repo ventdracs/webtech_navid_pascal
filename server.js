@@ -34,9 +34,7 @@ app.get('/api/test', async (req, res) => {
 // Personen abrufen
 app.get('/api/person', async (req, res) => {
     try {
-        console.log('GET /api/person angefragt');
-        const result = await pool.query('SELECT * FROM persons'); // Tabelle 'persons' muss existieren
-        console.log('Datenbank-Ergebnis:', result.rows);
+        const result = await pool.query('SELECT * FROM persons'); // ÄNDERUNG: Abrufen des neuen Feldes "image"
         res.json(result.rows);
     } catch (error) {
         console.error('Fehler beim Abrufen der Personen:', error);
@@ -46,16 +44,16 @@ app.get('/api/person', async (req, res) => {
 
 // Person hinzufügen
 app.post('/api/person', async (req, res) => {
-    const { name, age, height } = req.body;
+    const { name, age, height, image } = req.body; // ÄNDERUNG: Hinzufügen des Feldes "image"
 
-    if (!name || !age || !height) {
-        return res.status(400).json({ error: 'Alle Felder (name, age, height) sind erforderlich.' });
+    if (!name || !age || !height || !image) { // ÄNDERUNG: Validierung für "image"
+        return res.status(400).json({ error: 'Alle Felder (name, age, height, image) sind erforderlich.' });
     }
 
     try {
         const result = await pool.query(
-            'INSERT INTO persons (name, age, height) VALUES ($1, $2, $3) RETURNING *',
-            [name, parseInt(age, 10), parseInt(height, 10)]
+            'INSERT INTO persons (name, age, height, image) VALUES ($1, $2, $3, $4) RETURNING *', // ÄNDERUNG: Hinzufügen von "image" in der Abfrage
+            [name, parseInt(age, 10), parseInt(height, 10), image]
         );
         res.status(201).json(result.rows[0]);
     } catch (error) {
@@ -69,7 +67,7 @@ app.get('/api/person/:id', async (req, res) => {
     const { id } = req.params;
 
     try {
-        const result = await pool.query('SELECT * FROM persons WHERE id = $1', [id]);
+        const result = await pool.query('SELECT * FROM persons WHERE id = $1', [id]); // ÄNDERUNG: Abrufen des neuen Feldes "image"
         if (result.rows.length === 0) {
             return res.status(404).json({ error: 'Person nicht gefunden' });
         }
@@ -83,12 +81,12 @@ app.get('/api/person/:id', async (req, res) => {
 // Person aktualisieren
 app.put('/api/person/:id', async (req, res) => {
     const { id } = req.params;
-    const { name, age, height } = req.body;
+    const { name, age, height, image } = req.body; // ÄNDERUNG: Hinzufügen des Feldes "image"
 
     try {
         const result = await pool.query(
-            'UPDATE persons SET name = $1, age = $2, height = $3 WHERE id = $4 RETURNING *',
-            [name, parseInt(age, 10), parseInt(height, 10), id]
+            'UPDATE persons SET name = $1, age = $2, height = $3, image = $4 WHERE id = $5 RETURNING *', // ÄNDERUNG: Hinzufügen von "image" in der Abfrage
+            [name, parseInt(age, 10), parseInt(height, 10), image, id]
         );
         if (result.rows.length === 0) {
             return res.status(404).json({ error: 'Person nicht gefunden' });
@@ -105,7 +103,7 @@ app.delete('/api/person/:id', async (req, res) => {
     const { id } = req.params;
 
     try {
-        const result = await pool.query('DELETE FROM persons WHERE id = $1 RETURNING *', [id]);
+        const result = await pool.query('DELETE FROM persons WHERE id = $1 RETURNING *', [id]); // ÄNDERUNG: Feld "image" wird automatisch gelöscht
         if (result.rows.length === 0) {
             return res.status(404).json({ error: 'Person nicht gefunden' });
         }
