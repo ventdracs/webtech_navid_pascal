@@ -1,48 +1,99 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Personen Übersicht</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
-    <h1>Personen Übersicht</h1>
-    <div id="peopleGrid" class="grid-container"></div>
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Justus Angels</title>
+    <link rel="stylesheet" href="style.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Bowlby+One&display=swap" rel="stylesheet">
+  </head>
+
+  <body>
+    <header>
+      <img class="logo" src="logo2.png" alt="Logo einer schönen blonden Frau" />
+      <h1>Justus Angels</h1>
+    </header>
+    
+    <main>
+      <!-- Formular zum Hinzufügen einer Person -->
+      <form id="personForm">
+        <input type="text" id="name" placeholder="Name" required />
+        <input type="number" id="age" placeholder="Alter" required />
+        <input type="number" id="height" placeholder="Größe in cm" required />
+        <button type="submit">Hinzufügen</button>
+      </form>
+
+      <!-- Personenliste -->
+      <section id="peopleGrid" class="people-grid">
+        <!-- Dynamische Inhalte werden hier durch JavaScript eingefügt -->
+      </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+      <p>
+        <a href="Impressum.html">Impressum</a>
+        <a href="Kontakt.html">Kontakt</a>
+      </p>
+    </footer>
+
+    <!-- JavaScript -->
     <script>
-        const apiUrl = '/api/person';
+      const apiUrl = 'https://webtech-navid-pascal-d3nu.vercel.app/api/person'     // Backend-URL
 
-        async function loadPersons() {
-            try {
-                const response = await fetch(apiUrl);
-                if (!response.ok) {
-                    throw new Error('Fehler beim Abrufen der Personen.');
-                }
-                const persons = await response.json();
-                const peopleGrid = document.getElementById('peopleGrid');
+      // Personenliste laden
+      async function loadPersons() {
+          const response = await fetch(apiUrl); // GET-Anfrage an Backend
+          const persons = await response.json(); // Antwort als JSON
 
-                persons.forEach(person => {
-                    const personCard = `
-                        <div class="person-card">
-                            <div class="person-image-container">
-                                <img src="${person.image}" alt="Foto von ${person.name}" class="person-image" />
-                            </div>
-                            <div class="person-info">
-                                <h2>${person.name}</h2>
-                                <p>Alter: ${person.age}</p>
-                                <p>Größe: ${person.height} cm</p>
-                                <a href="person.html?id=${person.id}" class="detail-link">Details ansehen</a>
-                            </div>
-                        </div>
-                    `;
-                    peopleGrid.innerHTML += personCard;
-                });
-            } catch (error) {
-                console.error('Fehler beim Laden der Personen:', error);
-            }
-        }
+          const peopleGrid = document.getElementById('peopleGrid');
+          peopleGrid.innerHTML = ''; // Bestehenden Inhalt leeren
 
-        loadPersons();
+          // Personen durchlaufen und HTML-Blöcke einfügen
+          persons.forEach(person => {
+    const personCard = `
+        <div class="person-card">
+            <div class="person-image-container">
+                <img src="${person.image}" alt="Foto von ${person.name}" class="person-image" />
+            </div>
+            <div class="person-info">
+                <h2>${person.name}</h2>
+                <p>Alter: ${person.age}</p>
+                <p>Größe: ${person.height} cm</p>
+                <a href="person.html?id=${person.id}" class="detail-link">Details ansehen</a>
+            </div>
+        </div>
+    `;
+    peopleGrid.innerHTML += personCard;
+});
+      }
+
+      // Neue Person hinzufügen
+      document.getElementById('personForm').addEventListener('submit', async (event) => {
+          event.preventDefault(); // Standard-Formular-Submit verhindern
+
+          const newPerson = {
+              name: document.getElementById('name').value,
+              age: document.getElementById('age').value,
+              height: document.getElementById('height').value,
+          };
+
+          try {
+              await fetch(apiUrl, {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify(newPerson),
+              });
+
+              loadPersons(); // Liste aktualisieren
+              event.target.reset(); // Formular zurücksetzen
+          } catch (error) {
+              console.error('Fehler beim Hinzufügen:', error);
+          }
+      });
+
+      // Personenliste laden, wenn die Seite aufgerufen wird
+      loadPersons();
     </script>
-</body>
+  </body>
 </html>

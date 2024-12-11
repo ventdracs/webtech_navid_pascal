@@ -1,43 +1,64 @@
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html lang="de">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Person Details</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Personendetails</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-    <div id="personDetail" class="person-detail-container"></div>
-    <script>
-        const apiUrl = '/api/person';
-        const urlParams = new URLSearchParams(window.location.search);
-        const personId = urlParams.get('id');
+  <header>
+    <img class="logo" src="logo2.png" alt="Logo" />
+    <h1>Justus Angels</h1>
+  </header>
 
-        async function loadPersonDetails() {
-            try {
-                const response = await fetch(`${apiUrl}/${personId}`);
-                if (!response.ok) {
-                    throw new Error('Fehler beim Abrufen der Personendetails.');
-                }
-                const person = await response.json();
-                const personDetail = document.getElementById('personDetail');
+  <main>
+    <section id="personDetail" class="person-detail"></section>
+  </main>
 
-                personDetail.innerHTML = `
-                    <img src="${person.image}" alt="Foto von ${person.name}" class="person-image-large" />
-                    <h2>${person.name}</h2>
-                    <ul>
-                        <li><strong>Name:</strong> ${person.name}</li>
-                        <li><strong>Alter:</strong> ${person.age}</li>
-                        <li><strong>Größe:</strong> ${person.height} cm</li>
-                    </ul>
-                    <a href="index.html" class="back-link">Zurück zur Übersicht</a>
-                `;
-            } catch (error) {
-                console.error('Fehler beim Laden der Personendetails:', error);
-            }
+  <footer>
+    <p><a href="Impressum.html">Impressum</a></p>
+  </footer>
+
+  <script>
+  const apiUrl = 'https://webtech-navid-pascal-d3nu.vercel.app/api/person';
+const params = new URLSearchParams(window.location.search);
+const personId = params.get('id');
+
+async function loadPersonDetails() {
+    if (!personId) {
+        document.getElementById('personDetail').innerHTML = '<p>Keine gültige ID gefunden.</p>';
+        return;
+    }
+
+    try {
+        const response = await fetch(`${apiUrl}/${personId}`);
+        if (!response.ok) {
+            throw new Error('Person nicht gefunden');
         }
 
-        loadPersonDetails();
-    </script>
+        const person = await response.json();
+
+        const personDetail = document.getElementById('personDetail');
+        personDetail.innerHTML = `
+    <img src="${person.image}" alt="Foto von ${person.name}" class="person-image-large" />
+    <h2>${person.name}</h2>
+    <ul>
+        <li><strong>Name:</strong> ${person.name}</li>
+        <li><strong>Alter:</strong> ${person.age}</li>
+        <li><strong>Größe:</strong> ${person.height} cm</li>
+    </ul>
+    <a href="index.html" class="back-link">Zurück zur Übersicht</a>
+`;
+    } catch (error) {
+        console.error('Fehler beim Laden der Person:', error);
+        document.getElementById('personDetail').innerHTML = '<p>Fehler beim Laden der Personendetails.</p>';
+    }
+}
+
+// Lade die Details, wenn die Seite aufgerufen wird
+loadPersonDetails();
+
+  </script>
 </body>
 </html>
