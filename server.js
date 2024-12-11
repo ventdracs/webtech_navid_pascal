@@ -20,12 +20,23 @@ const pool = new Pool({
 // Statische Dateien bereitstellen
 app.use(express.static(path.join(__dirname, 'public')));
 
-// CRUD ROUTEN
+// Test-Endpunkt für die Datenbankverbindung
+app.get('/api/test', async (req, res) => {
+    try {
+        const result = await pool.query('SELECT NOW()');
+        res.json({ success: true, timestamp: result.rows[0].now });
+    } catch (error) {
+        console.error('Fehler bei der Datenbankverbindung:', error);
+        res.status(500).json({ success: false, error: 'Datenbankverbindung fehlgeschlagen' });
+    }
+});
 
 // Personen abrufen
 app.get('/api/person', async (req, res) => {
     try {
-        const result = await pool.query('SELECT * FROM persons'); // Tabelle 'persons' anpassen
+        console.log('GET /api/person angefragt');
+        const result = await pool.query('SELECT * FROM persons'); // Tabelle 'persons' muss existieren
+        console.log('Datenbank-Ergebnis:', result.rows);
         res.json(result.rows);
     } catch (error) {
         console.error('Fehler beim Abrufen der Personen:', error);
