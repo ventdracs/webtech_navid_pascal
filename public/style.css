@@ -282,3 +282,14 @@ header .logo {
 .add-category-button:hover {
   background-color: #218838;
 }
+
+/*category Feld styling vom select*/
+select[multiple] {
+  display: block;
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #fff;
+  font-size: 1rem;
+}

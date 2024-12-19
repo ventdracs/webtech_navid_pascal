@@ -48,37 +48,40 @@ app.get('/api/person', async (req, res) => {
 app.post('/api/person', async (req, res) => {
     const { name, age, height, image, categories } = req.body;
 
-    if (!name || !age || !height || !image) {
-        return res.status(400).json({ error: 'Alle Felder (name, age, height) sind erforderlich.' });
+    console.log('Empfangene Daten:', req.body); // Debugging, um die Anfrage zu überprüfen
+
+    // Validierung: Überprüfen, ob alle Felder vorhanden sind
+    if (!name || !age || !height || !categories || categories.length === 0) {
+        return res.status(400).json({ error: 'Alle Felder erforderlich, einschließlich mindestens einer Kategorie.' });
     }
 
     try {
         const client = await pool.connect();
-        await client.query('BEGIN');
+        await client.query('BEGIN'); // Transaktion starten
 
         const personResult = await client.query(
-            'INSERT INTO persons (name, age, height) VALUES ($1, $2, $3, $4) RETURNING *',
+            'INSERT INTO persons (name, age, height, image) VALUES ($1, $2, $3, $4) RETURNING id',
             [name, age, height, image]
         );
 
         const personId = personResult.rows[0].id;
 
-        if (categories && categories.length > 0) {
-            for (const categoryId of categories) {
-                await client.query(
-                    'INSERT INTO person_categories (person_id, category_id) VALUES ($1, $2)',
-                    [personId, categoryId]
-                );
-            }
+        // Kategorien zur Person hinzufügen
+        for (const categoryId of categories) {
+            await client.query(
+                'INSERT INTO person_categories (person_id, category_id) VALUES ($1, $2)',
+                [personId, categoryId]
+            );
         }
 
-        await client.query('COMMIT');
-        res.status(201).json(personResult.rows[0]);
+        await client.query('COMMIT'); // Transaktion abschließen
+        res.status(201).json({ id: personId });
     } catch (error) {
         console.error('Fehler beim Hinzufügen der Person:', error);
         res.status(500).json({ error: 'Interner Serverfehler' });
     }
 });
+
 
 
 // Einzelne Person abrufen
