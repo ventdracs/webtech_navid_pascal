@@ -40,8 +40,8 @@
 
                 persons.forEach(person => {
                     const categories = person.categories && person.categories.length > 0
-                        ? person.categories.join(', ')
-                        : 'Keine Kategorien';
+                        ? person.categories.map(cat => `<span class="category">${cat}</span>`).join('')
+                        : '<span class="category-none">Keine Kategorien</span>';
 
                     const personCard = `
                         <div class="person-card">
@@ -50,9 +50,9 @@
                             </div>
                             <div class="person-info">
                                 <h2>${person.name}</h2>
-                                <p>Alter: ${person.age}</p>
-                                <p>Größe: ${person.height} cm</p>
-                                <p>Kategorien: ${categories}</p>
+                                <p><strong>Alter:</strong> ${person.age}</p>
+                                <p><strong>Größe:</strong> ${person.height} cm</p>
+                                <p><strong>Kategorien:</strong> ${categories}</p>
                                 <a href="person.html?id=${person.id}" class="detail-link">Details ansehen</a>
                             </div>
                         </div>
