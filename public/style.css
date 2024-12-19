@@ -202,3 +202,58 @@ button[type="submit"]:hover {
   background-color: #005bb5;
 }
 
+/* Styling für add-person Button
+*/
+.add-person-button {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  margin-left: auto;
+  background-color: #0073e6;
+  color: #fff;
+  text-decoration: none;
+  border-radius: 4px;
+  font-size: 1rem;
+}
+
+.add-person-button:hover {
+  background-color: #005bb5;
+}
+
+/* Sytyling für add-person Seite
+*/
+.person-form {
+  max-width: 500px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background-color: #f8f8f8;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.person-form h2 {
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.person-form input {
+  width: 100%;
+  padding: 0.75rem;
+  margin-bottom: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.person-form button {
+  width: 100%;
+  padding: 0.75rem;
+  background-color: #0073e6;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.person-form button:hover {
+  background-color: #005bb5;
+}
+
