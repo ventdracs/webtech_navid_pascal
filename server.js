@@ -31,7 +31,7 @@ app.get('/api/test', async (req, res) => {
     }
 });
 
-// Personen abrufen
+// Personen abrufen CRUD
 app.get('/api/person', async (req, res) => {
     try {
         console.log('GET /api/person angefragt');
@@ -46,23 +46,40 @@ app.get('/api/person', async (req, res) => {
 
 // Person hinzufügen
 app.post('/api/person', async (req, res) => {
-    const { name, age, height } = req.body;
+    const { name, age, height, image, categories } = req.body;
 
-    if (!name || !age || !height) {
+    if (!name || !age || !height || !image) {
         return res.status(400).json({ error: 'Alle Felder (name, age, height) sind erforderlich.' });
     }
 
     try {
-        const result = await pool.query(
-            'INSERT INTO persons (name, age, height) VALUES ($1, $2, $3) RETURNING *',
-            [name, parseInt(age, 10), parseInt(height, 10)]
+        const client = await pool.connect();
+        await client.query('BEGIN');
+
+        const personResult = await client.query(
+            'INSERT INTO persons (name, age, height) VALUES ($1, $2, $3, $4) RETURNING *',
+            [name, age, height, image]
         );
-        res.status(201).json(result.rows[0]);
+
+        const personId = personResult.rows[0].id;
+
+        if (categories && categories.length > 0) {
+            for (const categoryId of categories) {
+                await client.query(
+                    'INSERT INTO person_categories (person_id, category_id) VALUES ($1, $2)',
+                    [personId, categoryId]
+                );
+            }
+        }
+
+        await client.query('COMMIT');
+        res.status(201).json(personResult.rows[0]);
     } catch (error) {
         console.error('Fehler beim Hinzufügen der Person:', error);
         res.status(500).json({ error: 'Interner Serverfehler' });
     }
 });
+
 
 // Einzelne Person abrufen
 app.get('/api/person/:id', async (req, res) => {
@@ -115,6 +132,72 @@ app.delete('/api/person/:id', async (req, res) => {
         res.status(500).json({ error: 'Interner Serverfehler' });
     }
 });
+
+// Kategorien abrufen CRUD
+app.get('/api/categories', async (req, res) => {
+    try {
+        const result = await pool.query(
+            'SELECT categories.id, categories.name, COUNT(person_categories.person_id) AS count ' +
+            'FROM categories ' +
+            'LEFT JOIN person_categories ON categories.id = person_categories.category_id ' +
+            'GROUP BY categories.id'
+        );
+        res.json(result.rows);
+    } catch (error) {
+        console.error('Fehler beim Abrufen der Kategorien:', error);
+        res.status(500).json({ error: 'Interner Serverfehler' });
+    }
+});
+
+// Kategorie hinzufügen
+app.post('/api/categories', async (req, res) => {
+    const { name } = req.body;
+    try {
+        const result = await pool.query(
+            'INSERT INTO categories (name) VALUES ($1) RETURNING *',
+            [name]
+        );
+        res.status(201).json(result.rows[0]);
+    } catch (error) {
+        console.error('Fehler beim Hinzufügen der Kategorie:', error);
+        res.status(500).json({ error: 'Interner Serverfehler' });
+    }
+});
+
+// Kategorie bearbeiten
+app.put('/api/categories/:id', async (req, res) => {
+    const { id } = req.params;
+    const { name } = req.body;
+    try {
+        const result = await pool.query(
+            'UPDATE categories SET name = $1 WHERE id = $2 RETURNING *',
+            [name, id]
+        );
+        if (result.rows.length === 0) {
+            return res.status(404).json({ error: 'Kategorie nicht gefunden' });
+        }
+        res.json(result.rows[0]);
+    } catch (error) {
+        console.error('Fehler beim Aktualisieren der Kategorie:', error);
+        res.status(500).json({ error: 'Interner Serverfehler' });
+    }
+});
+
+// Kategorie löschen
+app.delete('/api/categories/:id', async (req, res) => {
+    const { id } = req.params;
+    try {
+        const result = await pool.query('DELETE FROM categories WHERE id = $1 RETURNING *', [id]);
+        if (result.rows.length === 0) {
+            return res.status(404).json({ error: 'Kategorie nicht gefunden' });
+        }
+        res.json({ message: 'Kategorie gelöscht', category: result.rows[0] });
+    } catch (error) {
+        console.error('Fehler beim Löschen der Kategorie:', error);
+        res.status(500).json({ error: 'Interner Serverfehler' });
+    }
+});
+
 
 // Routen
 app.get('/', (req, res) => {

@@ -19,6 +19,17 @@
     
     
     <main>
+      <form id="addPersonForm" class="person-form">
+        <h2>Neue Person hinzufügen</h2>
+        <input type="text" id="name" placeholder="Name" required />
+        <input type="number" id="age" placeholder="Alter" required />
+        <input type="number" id="height" placeholder="Größe in cm" required />
+        <select id="categories" multiple>
+          <!-- Kategorien werden hier dynamisch geladen -->
+        </select>
+        <button type="submit">Hinzufügen</button>
+      </form>
+      
       <!-- Personenliste -->
       <section id="peopleGrid" class="people-grid">
         <!-- Dynamische Inhalte werden hier durch JavaScript eingefügt -->
@@ -63,6 +74,51 @@
     peopleGrid.innerHTML += personCard;
 });
       }
+
+      async function loadCategories() {
+    const response = await fetch('/api/categories');
+    const categories = await response.json();
+    const categorySelect = document.getElementById('categories');
+    categorySelect.innerHTML = ''; // Bestehende Optionen löschen
+
+    categories.forEach(category => {
+        const option = document.createElement('option');
+        option.value = category.id;
+        option.textContent = `${category.name} (${category.count})`;
+        categorySelect.appendChild(option);
+    });
+}
+
+document.getElementById('addPersonForm').addEventListener('submit', async (event) => {
+    event.preventDefault();
+
+    const selectedCategories = Array.from(document.getElementById('categories').selectedOptions)
+        .map(option => option.value);
+
+    const newPerson = {
+        name: document.getElementById('name').value,
+        age: document.getElementById('age').value,
+        height: document.getElementById('height').value,
+        categories: selectedCategories,
+    };
+
+    try {
+        await fetch('/api/person', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(newPerson),
+        });
+        alert('Person erfolgreich hinzugefügt!');
+        event.target.reset();
+    } catch (error) {
+        console.error('Fehler beim Hinzufügen:', error);
+        alert('Fehler beim Hinzufügen der Person.');
+    }
+});
+
+// Kategorien laden, wenn die Seite aufgerufen wird
+loadCategories();
+
       // Personenliste laden, wenn die Seite aufgerufen wird
       loadPersons();
     </script>
