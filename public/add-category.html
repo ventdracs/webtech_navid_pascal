@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Add Category</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header>
+    <a href="index.html">
+      <img class="logo" src="logo2.png" alt="Logo" />
+    </a>
+    <h1>Justus Angels</h1>
+    <a href="add-person.html" class="add-person-button">Add Person</a>
+  </header>
+  
+  <main>
+    <form id="addCategoryForm" class="person-form">
+      <h2>Neue Kategorie hinzufügen</h2>
+      <input type="text" id="newCategoryName" placeholder="Kategoriename" required />
+      <button type="submit">Hinzufügen</button>
+    </form>
+    <section id="categoryList" class="people-grid">
+      <!-- Dynamische Kategorie-Liste -->
+    </section>
+  </main>
+
+  <footer>
+    <p><a href="Impressum.html">Impressum</a> | <a href="Kontakt.html">Kontakt</a></p>
+  </footer>
+
+  <script>
+    const categoryApiUrl = '/api/categories';
+
+    async function loadCategories() {
+      try {
+        const response = await fetch(categoryApiUrl);
+        const categories = await response.json();
+        const categoryList = document.getElementById('categoryList');
+        categoryList.innerHTML = '';
+
+        categories.forEach(category => {
+          const categoryCard = `
+            <div class="person-card">
+              <h2>${category.name}</h2>
+              <p>Anzahl der Personen: ${category.count}</p>
+            </div>
+          `;
+          categoryList.innerHTML += categoryCard;
+        });
+      } catch (error) {
+        console.error('Fehler beim Laden der Kategorien:', error);
+      }
+    }
+
+    document.getElementById('addCategoryForm').addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const newCategoryName = document.getElementById('newCategoryName').value.trim();
+
+      if (!newCategoryName) {
+        alert('Bitte einen Kategorienamen eingeben.');
+        return;
+      }
+
+      try {
+        await fetch(categoryApiUrl, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name: newCategoryName }),
+        });
+
+        document.getElementById('newCategoryName').value = '';
+        loadCategories();
+      } catch (error) {
+        console.error('Fehler beim Hinzufügen der Kategorie:', error);
+        alert('Fehler beim Hinzufügen der Kategorie.');
+      }
+    });
+
+    loadCategories();
+  </script>
+</body>
+</html>
