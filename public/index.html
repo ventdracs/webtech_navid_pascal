@@ -1,74 +1,71 @@
-<!doctype html>
-<html lang="de">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Justus Angels</title>
-    <link rel="stylesheet" href="style.css" />
-    <link href="https://fonts.googleapis.com/css2?family=Bowlby+One&display=swap" rel="stylesheet">
-  </head>
-
-  <body>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Personen Übersicht</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
     <header>
-      <a href="index.html">
-        <img class="logo" src="logo2.png" alt="Logo einer schönen blonden Frau" />
-      </a>
-      <h1>Justus Angels</h1>
-      <a href="add-person.html" class="add-person-button">Add Person</a>
-      <a href="add-category.html" class="add-category-button">Add Category</a>
+        <a href="index.html">
+            <img class="logo" src="logo2.png" alt="Logo" />
+        </a>
+        <h1>Justus Angels</h1>
+        <a href="add-person.html" class="add-person-button">Add Person</a>
+        <a href="add-category.html" class="add-category-button">Add Category</a>
     </header>
-    
-    
+
     <main>
-      <!-- Personenliste -->
-      <section id="peopleGrid" class="people-grid">
-        <!-- Dynamische Inhalte werden hier durch JavaScript eingefügt -->
-      </section>
+        <div id="peopleGrid" class="grid-container"></div>
     </main>
 
-    <!-- Footer -->
     <footer>
-      <p>
-        <a href="Impressum.html">Impressum</a>
-        <a href="Kontakt.html">Kontakt</a>
-      </p>
+        <p><a href="Impressum.html">Impressum</a> | <a href="Kontakt.html">Kontakt</a></p>
     </footer>
 
-    <!-- JavaScript -->
     <script>
-      const apiUrl = 'https://webtech-navid-pascal-d3nu.vercel.app/api/person'     // Backend-URL
+        const apiUrl = '/api/person';
 
-      // Personenliste laden
-      async function loadPersons() {
-          const response = await fetch(apiUrl); // GET-Anfrage an Backend
-          const persons = await response.json(); // Antwort als JSON
+        async function loadPersons() {
+            try {
+                const response = await fetch(apiUrl);
+                if (!response.ok) {
+                    throw new Error('Fehler beim Abrufen der Personen.');
+                }
+                const persons = await response.json();
+                const peopleGrid = document.getElementById('peopleGrid');
 
-          const peopleGrid = document.getElementById('peopleGrid');
-          peopleGrid.innerHTML = ''; // Bestehenden Inhalt leeren
+                peopleGrid.innerHTML = ''; // Vorherigen Inhalt löschen
 
-          // Personen durchlaufen und HTML-Blöcke einfügen
-          persons.forEach(person => {
-    const personCard = `
-        <div class="person-card">
-            <div class="person-image-container">
-                <img src="${person.image}" alt="Foto von ${person.name}" class="person-image" />
-            </div>
-            <div class="person-info">
-                <h2>${person.name}</h2>
-                <p>Alter: ${person.age}</p>
-                <p>Größe: ${person.height} cm</p>
-                <a href="person.html?id=${person.id}" class="detail-link">Details ansehen</a>
-            </div>
-        </div>
-    `;
-    peopleGrid.innerHTML += personCard;
-});
-      }
-      
-      // Personenliste laden, wenn die Seite aufgerufen wird
-      loadPersons();
+                persons.forEach(person => {
+                    const categories = person.categories && person.categories.length > 0
+                        ? person.categories.join(', ')
+                        : 'Keine Kategorien';
 
-      
+                    const personCard = `
+                        <div class="person-card">
+                            <div class="person-image-container">
+                                <img src="${person.image}" alt="Foto von ${person.name}" class="person-image" />
+                            </div>
+                            <div class="person-info">
+                                <h2>${person.name}</h2>
+                                <p>Alter: ${person.age}</p>
+                                <p>Größe: ${person.height} cm</p>
+                                <p>Kategorien: ${categories}</p>
+                                <a href="person.html?id=${person.id}" class="detail-link">Details ansehen</a>
+                            </div>
+                        </div>
+                    `;
+                    peopleGrid.innerHTML += personCard;
+                });
+            } catch (error) {
+                console.error('Fehler beim Laden der Personen:', error);
+            }
+        }
+
+        // Personen beim Laden der Seite abrufen
+        loadPersons();
     </script>
-  </body>
+</body>
 </html>
