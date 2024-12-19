@@ -293,3 +293,13 @@ select[multiple] {
   background-color: #fff;
   font-size: 1rem;
 }
+/* Style für kategorien in der Person-Card*/
+.person-info p:last-child {
+  font-style: italic;
+  color: #555;
+}
+
+.person-detail li:last-child {
+  font-style: italic;
+  color: #555;
+}

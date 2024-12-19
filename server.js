@@ -34,15 +34,21 @@ app.get('/api/test', async (req, res) => {
 // Personen abrufen CRUD
 app.get('/api/person', async (req, res) => {
     try {
-        console.log('GET /api/person angefragt');
-        const result = await pool.query('SELECT * FROM persons'); // Tabelle 'persons' muss existieren
-        console.log('Datenbank-Ergebnis:', result.rows);
+        const result = await pool.query(`
+            SELECT p.id, p.name, p.age, p.height, p.image, 
+                   ARRAY_AGG(c.name) AS categories
+            FROM persons p
+            LEFT JOIN person_categories pc ON p.id = pc.person_id
+            LEFT JOIN categories c ON pc.category_id = c.id
+            GROUP BY p.id
+        `);
         res.json(result.rows);
     } catch (error) {
         console.error('Fehler beim Abrufen der Personen:', error);
         res.status(500).json({ error: 'Interner Serverfehler' });
     }
 });
+
 
 // Person hinzufügen
 app.post('/api/person', async (req, res) => {
@@ -89,7 +95,15 @@ app.get('/api/person/:id', async (req, res) => {
     const { id } = req.params;
 
     try {
-        const result = await pool.query('SELECT * FROM persons WHERE id = $1', [id]);
+        const result = await pool.query(`
+            SELECT p.id, p.name, p.age, p.height, p.image, 
+                   ARRAY_AGG(c.name) AS categories
+            FROM persons p
+            LEFT JOIN person_categories pc ON p.id = pc.person_id
+            LEFT JOIN categories c ON pc.category_id = c.id
+            WHERE p.id = $1
+            GROUP BY p.id
+        `, [id]);
         if (result.rows.length === 0) {
             return res.status(404).json({ error: 'Person nicht gefunden' });
         }
@@ -99,6 +113,7 @@ app.get('/api/person/:id', async (req, res) => {
         res.status(500).json({ error: 'Interner Serverfehler' });
     }
 });
+
 
 // Person aktualisieren
 app.put('/api/person/:id', async (req, res) => {
