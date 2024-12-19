@@ -19,14 +19,6 @@
     
     
     <main>
-      <!-- Formular zum Hinzufügen einer Person -->
-      <form id="personForm">
-        <input type="text" id="name" placeholder="Name" required />
-        <input type="number" id="age" placeholder="Alter" required />
-        <input type="number" id="height" placeholder="Größe in cm" required />
-        <button type="submit">Hinzufügen</button>
-      </form>
-
       <!-- Personenliste -->
       <section id="peopleGrid" class="people-grid">
         <!-- Dynamische Inhalte werden hier durch JavaScript eingefügt -->
@@ -71,31 +63,6 @@
     peopleGrid.innerHTML += personCard;
 });
       }
-
-      // Neue Person hinzufügen
-      document.getElementById('personForm').addEventListener('submit', async (event) => {
-          event.preventDefault(); // Standard-Formular-Submit verhindern
-
-          const newPerson = {
-              name: document.getElementById('name').value,
-              age: document.getElementById('age').value,
-              height: document.getElementById('height').value,
-          };
-
-          try {
-              await fetch(apiUrl, {
-                  method: 'POST',
-                  headers: { 'Content-Type': 'application/json' },
-                  body: JSON.stringify(newPerson),
-              });
-
-              loadPersons(); // Liste aktualisieren
-              event.target.reset(); // Formular zurücksetzen
-          } catch (error) {
-              console.error('Fehler beim Hinzufügen:', error);
-          }
-      });
-
       // Personenliste laden, wenn die Seite aufgerufen wird
       loadPersons();
     </script>
