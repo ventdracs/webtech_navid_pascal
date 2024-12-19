@@ -21,6 +21,17 @@
       <input type="text" id="name" placeholder="Name" required />
       <input type="number" id="age" placeholder="Alter" required />
       <input type="number" id="height" placeholder="Größe in cm" required />
+      
+      <label for="categories">Kategorien auswählen:</label>
+      <select id="categories" multiple>
+        <!-- Dynamisch geladene Kategorien -->
+      </select>
+      
+      <div class="add-category">
+        <input type="text" id="newCategory" placeholder="Neue Kategorie" />
+        <button type="button" id="addCategoryButton">Kategorie hinzufügen</button>
+      </div>
+      
       <button type="submit">Hinzufügen</button>
     </form>
   </main>
@@ -54,6 +65,48 @@
         alert('Fehler beim Hinzufügen der Person.');
       }
     });
+
+    async function loadCategories() {
+    try {
+        const response = await fetch('/api/categories');
+        const categories = await response.json();
+        const categorySelect = document.getElementById('categories');
+        categorySelect.innerHTML = ''; // Vorherige Optionen löschen
+
+        categories.forEach(category => {
+            const option = document.createElement('option');
+            option.value = category.id;
+            option.textContent = category.name;
+            categorySelect.appendChild(option);
+        });
+    } catch (error) {
+        console.error('Fehler beim Laden der Kategorien:', error);
+    }
+}
+document.getElementById('addCategoryButton').addEventListener('click', async () => {
+    const newCategoryName = document.getElementById('newCategory').value.trim();
+
+    if (!newCategoryName) {
+        alert('Bitte einen Kategorienamen eingeben');
+        return;
+    }
+
+    try {
+        await fetch('/api/categories', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ name: newCategoryName }),
+        });
+
+        document.getElementById('newCategory').value = ''; // Eingabefeld leeren
+        loadCategories(); // Kategorien neu laden
+    } catch (error) {
+        console.error('Fehler beim Hinzufügen der Kategorie:', error);
+        alert('Fehler beim Hinzufügen der Kategorie.');
+    }
+});
+
+
   </script>
 </body>
 </html>
