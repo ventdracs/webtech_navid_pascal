@@ -318,3 +318,12 @@ select[multiple] {
   font-style: italic;
   color: #999;
 }
+/* Styling für Search-Bar*/
+.search-bar {
+  padding: 0.5rem;
+  font-size: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  margin-right: 1rem;
+  width: 200px;
+}

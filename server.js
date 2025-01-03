@@ -33,6 +33,9 @@ app.get('/api/test', async (req, res) => {
 
 // Personen abrufen CRUD
 app.get('/api/person', async (req, res) => {
+    const { search } = req.query;
+    const searchTerm = search ? `%${search}%` : '%';
+
     try {
         const result = await pool.query(`
             SELECT p.id, p.name, p.age, p.height, p.image, 
@@ -40,14 +43,16 @@ app.get('/api/person', async (req, res) => {
             FROM persons p
             LEFT JOIN person_categories pc ON p.id = pc.person_id
             LEFT JOIN categories c ON pc.category_id = c.id
+            WHERE p.name ILIKE $1 OR CAST(p.age AS TEXT) ILIKE $1 OR CAST(p.height AS TEXT) ILIKE $1
             GROUP BY p.id
-        `);
+        `, [searchTerm]);
         res.json(result.rows);
     } catch (error) {
         console.error('Fehler beim Abrufen der Personen:', error);
         res.status(500).json({ error: 'Interner Serverfehler' });
     }
 });
+
 
 
 // Person hinzufügen
