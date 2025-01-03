@@ -43,15 +43,25 @@ app.get('/api/person', async (req, res) => {
             FROM persons p
             LEFT JOIN person_categories pc ON p.id = pc.person_id
             LEFT JOIN categories c ON pc.category_id = c.id
-            WHERE p.name ILIKE $1 OR CAST(p.age AS TEXT) ILIKE $1 OR CAST(p.height AS TEXT) ILIKE $1
+            WHERE p.name ILIKE $1 
+               OR CAST(p.age AS TEXT) ILIKE $1 
+               OR CAST(p.height AS TEXT) ILIKE $1
+               OR EXISTS (
+                   SELECT 1
+                   FROM categories
+                   WHERE categories.name ILIKE $1
+                     AND categories.id = pc.category_id
+               )
             GROUP BY p.id
         `, [searchTerm]);
+
         res.json(result.rows);
     } catch (error) {
         console.error('Fehler beim Abrufen der Personen:', error);
         res.status(500).json({ error: 'Interner Serverfehler' });
     }
 });
+
 
 
 

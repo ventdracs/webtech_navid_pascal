@@ -26,53 +26,54 @@
     </footer>
 
     <script>
-    const apiUrl = '/api/person';
-
-    async function loadPersons(searchTerm = '') {
-        try {
-            const response = await fetch(`${apiUrl}?search=${encodeURIComponent(searchTerm)}`);
-            if (!response.ok) {
-                throw new Error('Fehler beim Abrufen der Personen.');
+        const apiUrl = '/api/person';
+    
+        async function loadPersons(searchTerm = '') {
+            try {
+                const response = await fetch(`${apiUrl}?search=${encodeURIComponent(searchTerm)}`);
+                if (!response.ok) {
+                    throw new Error('Fehler beim Abrufen der Personen.');
+                }
+                const persons = await response.json();
+                const peopleGrid = document.getElementById('peopleGrid');
+    
+                peopleGrid.innerHTML = ''; // Vorherigen Inhalt löschen
+    
+                persons.forEach(person => {
+                    const categories = person.categories && person.categories.length > 0
+                        ? person.categories.map(cat => `<span class="category">${cat}</span>`).join(' ')
+                        : '<span class="category-none">Keine Kategorien</span>';
+    
+                    const personCard = `
+                        <div class="person-card">
+                            <div class="person-image-container">
+                                <img src="${person.image}" alt="Foto von ${person.name}" class="person-image" />
+                            </div>
+                            <div class="person-info">
+                                <h2>${person.name}</h2>
+                                <p><strong>Alter:</strong> ${person.age}</p>
+                                <p><strong>Größe:</strong> ${person.height} cm</p>
+                                <p><strong>Kategorien:</strong> ${categories}</p>
+                                <a href="person.html?id=${person.id}" class="detail-link">Details ansehen</a>
+                            </div>
+                        </div>
+                    `;
+                    peopleGrid.innerHTML += personCard;
+                });
+            } catch (error) {
+                console.error('Fehler beim Laden der Personen:', error);
             }
-            const persons = await response.json();
-            const peopleGrid = document.getElementById('peopleGrid');
-
-            peopleGrid.innerHTML = ''; // Vorherigen Inhalt löschen
-
-            persons.forEach(person => {
-                const categories = person.categories && person.categories.length > 0
-                    ? person.categories.map(cat => `<span class="category">${cat}</span>`).join(' ')
-                    : '<span class="category-none">Keine Kategorien</span>';
-
-                const personCard = `
-                    <div class="person-card">
-                        <div class="person-image-container">
-                            <img src="${person.image}" alt="Foto von ${person.name}" class="person-image" />
-                        </div>
-                        <div class="person-info">
-                            <h2>${person.name}</h2>
-                            <p><strong>Alter:</strong> ${person.age}</p>
-                            <p><strong>Größe:</strong> ${person.height} cm</p>
-                            <p><strong>Kategorien:</strong> ${categories}</p>
-                            <a href="person.html?id=${person.id}" class="detail-link">Details ansehen</a>
-                        </div>
-                    </div>
-                `;
-                peopleGrid.innerHTML += personCard;
-            });
-        } catch (error) {
-            console.error('Fehler beim Laden der Personen:', error);
         }
-    }
-
-    document.getElementById('searchInput').addEventListener('input', (event) => {
-        const searchTerm = event.target.value;
-        loadPersons(searchTerm);
-    });
-
-    // Personen beim Laden der Seite abrufen
-    loadPersons();
-</script>
+    
+        document.getElementById('searchInput').addEventListener('input', (event) => {
+            const searchTerm = event.target.value;
+            loadPersons(searchTerm);
+        });
+    
+        // Personen beim Laden der Seite abrufen
+        loadPersons();
+    </script>
+    
 
 </body>
 </html>
