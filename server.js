@@ -5,7 +5,8 @@ const path = require('path');
 const { Pool } = require('pg'); // PostgreSQL Client
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const JWT_SECRET = 'geheimratsecken';
+const JWT_SECRET = process.env.JWT_SECRET || 'geheimratsecken';
+
 
 
 const app = express();
@@ -295,8 +296,8 @@ app.post('/api/login', async (req, res) => {
         }
 
         // JWT erstellen
-        const token = jwt.sign({ id: user.id, username: user.username }, process.env.JWT_SECRET, {
-            expiresIn: '1h',
+        const token = jwt.sign({ id: user.id, username: user.username }, JWT_SECRET, {
+            expiresIn: '1h', // Token ist eine Stunde gültig
         });
 
         res.json({ token, username: user.username });
@@ -305,6 +306,7 @@ app.post('/api/login', async (req, res) => {
         res.status(500).json({ error: 'Interner Serverfehler' });
     }
 });
+
 
 
 // Routen
