@@ -13,11 +13,11 @@
         </a>
         <h1>Justus Angels</h1>
         <input type="text" id="searchInput" class="search-bar" placeholder="Suchen..." />
-    <input type="number" id="minAge" class="filter-input" placeholder="Mindestalter" />
-    <input type="number" id="maxAge" class="filter-input" placeholder="Maximalalter" />
-    <button id="filterButton" class="filter-button">Filter</button>
-    <a href="add-person.html" class="add-person-button">Add Person</a>
-    <a href="add-category.html" class="add-category-button">Add Category</a>
+        <input type="number" id="minAge" class="filter-input" placeholder="Mindestalter" />
+        <input type="number" id="maxAge" class="filter-input" placeholder="Maximalalter" />
+        <button id="filterButton" class="filter-button">Filter</button>
+        <a href="add-person.html" class="add-person-button">Add Person</a>
+        <a href="add-category.html" class="add-category-button">Add Category</a>
     </header>
 
     <main>
@@ -30,30 +30,24 @@
 
     <script>
         const apiUrl = '/api/person';
-    
-        async function loadPersons(searchTerm = '', minAge = '', maxAge = '') {
+
+        // Personen laden und in die Übersicht einfügen
+        async function loadPersons() {
             try {
-                const queryParams = new URLSearchParams({
-                    search: searchTerm,
-                    minAge: minAge,
-                    maxAge: maxAge
-                });
-    
-                const response = await fetch(`${apiUrl}?${queryParams}`);
+                const response = await fetch(apiUrl);
                 if (!response.ok) {
                     throw new Error('Fehler beim Abrufen der Personen.');
                 }
-    
                 const persons = await response.json();
                 const peopleGrid = document.getElementById('peopleGrid');
-    
+
                 peopleGrid.innerHTML = ''; // Vorherigen Inhalt löschen
-    
+
                 persons.forEach(person => {
                     const categories = person.categories && person.categories.length > 0
                         ? person.categories.map(cat => `<span class="category">${cat}</span>`).join(' ')
                         : '<span class="category-none">Keine Kategorien</span>';
-    
+
                     const personCard = `
                         <div class="person-card">
                             <div class="person-image-container">
@@ -74,26 +68,39 @@
                 console.error('Fehler beim Laden der Personen:', error);
             }
         }
-    
+
+        // Weiterleitung zur Suchergebnisseite bei Eingabe in das Suchfeld
         document.getElementById('searchInput').addEventListener('input', (event) => {
             const searchTerm = event.target.value;
             const minAge = document.getElementById('minAge').value;
             const maxAge = document.getElementById('maxAge').value;
-            loadPersons(searchTerm, minAge, maxAge);
+
+            const queryParams = new URLSearchParams({
+                search: searchTerm,
+                minAge: minAge,
+                maxAge: maxAge
+            });
+
+            window.location.href = `search-results.html?${queryParams}`;
         });
-    
+
+        // Weiterleitung zur Suchergebnisseite beim Klicken des Filter-Buttons
         document.getElementById('filterButton').addEventListener('click', () => {
             const searchTerm = document.getElementById('searchInput').value;
             const minAge = document.getElementById('minAge').value;
             const maxAge = document.getElementById('maxAge').value;
-            loadPersons(searchTerm, minAge, maxAge);
+
+            const queryParams = new URLSearchParams({
+                search: searchTerm,
+                minAge: minAge,
+                maxAge: maxAge
+            });
+
+            window.location.href = `search-results.html?${queryParams}`;
         });
-    
+
         // Personen beim Laden der Seite abrufen
         loadPersons();
     </script>
-    
-    
-
 </body>
 </html>
