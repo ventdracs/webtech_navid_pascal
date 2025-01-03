@@ -47,7 +47,7 @@
                 const persons = await response.json();
                 const searchResultsGrid = document.getElementById('searchResultsGrid');
 
-                searchResultsGrid.innerHTML = ''; // Vorherigen Inhalt löschen
+                searchResultsGrid.innerHTML = ''; // Vorherigen Inhalt löschen test
 
                 persons.forEach(person => {
                     const categories = person.categories && person.categories.length > 0
