@@ -22,6 +22,7 @@
             <span id="loggedInUser"></span>
             <button id="logoutButton" style="display: none;">Logout</button>
             <a href="login.html" id="loginButton" class="login-button">Login</a>
+            <a href="register.html" id="registerButton" class="register-button">Registrieren</a>
         </div>
     </header>
 
@@ -81,8 +82,10 @@
             document.getElementById('loggedInUser').textContent = `Hallo, ${username}`;
             document.getElementById('logoutButton').style.display = 'block';
             document.getElementById('loginButton').style.display = 'none';
+            document.getElementById('registerButton').style.display = 'none';
         } else {
             document.getElementById('loginButton').style.display = 'block';
+            document.getElementById('registerButton').style.display = 'block';
         }
 
         // Logout-Button
