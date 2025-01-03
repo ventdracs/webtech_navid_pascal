@@ -13,8 +13,11 @@
         </a>
         <h1>Justus Angels</h1>
         <input type="text" id="searchInput" class="search-bar" placeholder="Suchen..." />
-        <a href="add-person.html" class="add-person-button">Add Person</a>
-        <a href="add-category.html" class="add-category-button">Add Category</a>
+    <input type="number" id="minAge" class="filter-input" placeholder="Mindestalter" />
+    <input type="number" id="maxAge" class="filter-input" placeholder="Maximalalter" />
+    <button id="filterButton" class="filter-button">Filter</button>
+    <a href="add-person.html" class="add-person-button">Add Person</a>
+    <a href="add-category.html" class="add-category-button">Add Category</a>
     </header>
 
     <main>
@@ -28,12 +31,19 @@
     <script>
         const apiUrl = '/api/person';
     
-        async function loadPersons(searchTerm = '') {
+        async function loadPersons(searchTerm = '', minAge = '', maxAge = '') {
             try {
-                const response = await fetch(`${apiUrl}?search=${encodeURIComponent(searchTerm)}`);
+                const queryParams = new URLSearchParams({
+                    search: searchTerm,
+                    minAge: minAge,
+                    maxAge: maxAge
+                });
+    
+                const response = await fetch(`${apiUrl}?${queryParams}`);
                 if (!response.ok) {
                     throw new Error('Fehler beim Abrufen der Personen.');
                 }
+    
                 const persons = await response.json();
                 const peopleGrid = document.getElementById('peopleGrid');
     
@@ -67,12 +77,22 @@
     
         document.getElementById('searchInput').addEventListener('input', (event) => {
             const searchTerm = event.target.value;
-            loadPersons(searchTerm);
+            const minAge = document.getElementById('minAge').value;
+            const maxAge = document.getElementById('maxAge').value;
+            loadPersons(searchTerm, minAge, maxAge);
+        });
+    
+        document.getElementById('filterButton').addEventListener('click', () => {
+            const searchTerm = document.getElementById('searchInput').value;
+            const minAge = document.getElementById('minAge').value;
+            const maxAge = document.getElementById('maxAge').value;
+            loadPersons(searchTerm, minAge, maxAge);
         });
     
         // Personen beim Laden der Seite abrufen
         loadPersons();
     </script>
+    
     
 
 </body>

@@ -33,7 +33,7 @@ app.get('/api/test', async (req, res) => {
 
 // Personen abrufen CRUD
 app.get('/api/person', async (req, res) => {
-    const { search } = req.query;
+    const { search, minAge, maxAge } = req.query;
     const searchTerm = search ? `%${search}%` : '%';
 
     try {
@@ -43,17 +43,17 @@ app.get('/api/person', async (req, res) => {
             FROM persons p
             LEFT JOIN person_categories pc ON p.id = pc.person_id
             LEFT JOIN categories c ON pc.category_id = c.id
-            WHERE p.name ILIKE $1 
-               OR CAST(p.age AS TEXT) ILIKE $1 
-               OR CAST(p.height AS TEXT) ILIKE $1
-               OR EXISTS (
-                   SELECT 1
-                   FROM categories
-                   WHERE categories.name ILIKE $1
-                     AND categories.id = pc.category_id
-               )
+            WHERE (p.name ILIKE $1 OR CAST(p.age AS TEXT) ILIKE $1 OR CAST(p.height AS TEXT) ILIKE $1
+                   OR EXISTS (
+                       SELECT 1
+                       FROM categories
+                       WHERE categories.name ILIKE $1
+                         AND categories.id = pc.category_id
+                   ))
+              AND (p.age >= $2 OR $2 IS NULL)
+              AND (p.age <= $3 OR $3 IS NULL)
             GROUP BY p.id
-        `, [searchTerm]);
+        `, [searchTerm, minAge || null, maxAge || null]);
 
         res.json(result.rows);
     } catch (error) {
