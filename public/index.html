@@ -69,19 +69,21 @@
             }
         }
 
-        // Weiterleitung zur Suchergebnisseite bei Eingabe in das Suchfeld
-        document.getElementById('searchInput').addEventListener('input', (event) => {
-            const searchTerm = event.target.value;
-            const minAge = document.getElementById('minAge').value;
-            const maxAge = document.getElementById('maxAge').value;
+        // Event-Listener für das Suchfeld
+        document.getElementById('searchInput').addEventListener('keydown', (event) => {
+            if (event.key === 'Enter') { // Nur bei Enter-Taste
+                const searchTerm = event.target.value;
+                const minAge = document.getElementById('minAge').value;
+                const maxAge = document.getElementById('maxAge').value;
 
-            const queryParams = new URLSearchParams({
-                search: searchTerm,
-                minAge: minAge,
-                maxAge: maxAge
-            });
+                const queryParams = new URLSearchParams({
+                    search: searchTerm,
+                    minAge: minAge,
+                    maxAge: maxAge
+                });
 
-            window.location.href = `search-results.html?${queryParams}`;
+                window.location.href = `search-results.html?${queryParams}`;
+            }
         });
 
         // Weiterleitung zur Suchergebnisseite beim Klicken des Filter-Buttons
