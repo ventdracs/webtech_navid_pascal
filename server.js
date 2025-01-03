@@ -27,6 +27,9 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // Middleware für geschützte Routen
 const authenticateToken = (req, res, next) => {
+    console.log('JWT_SECRET:', process.env.JWT_SECRET || JWT_SECRET);
+
+
     const authHeader = req.headers['authorization'];
     const token = authHeader && authHeader.split(' ')[1];
 
@@ -295,6 +298,8 @@ app.post('/api/login', async (req, res) => {
             return res.status(401).json({ error: 'Ungültiger Benutzername oder Passwort' });
         }
 
+        console.log('JWT_SECRET bei Token-Erstellung:', process.env.JWT_SECRET || JWT_SECRET);
+        
         // JWT erstellen
         const token = jwt.sign({ id: user.id, username: user.username }, JWT_SECRET, {
             expiresIn: '1h', // Token ist eine Stunde gültig

@@ -60,10 +60,12 @@
   event.preventDefault();
 
   const token = localStorage.getItem('token');
-  if (!token) {
+if (!token) {
     alert('Bitte loggen Sie sich ein, um eine Person hinzuzufügen.');
+    console.log('Kein Token gefunden.');
     return;
-  }
+}
+
 
   const selectedCategories = Array.from(document.getElementById('categories').selectedOptions)
     .map(option => option.value);
