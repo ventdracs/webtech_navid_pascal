@@ -56,38 +56,38 @@ main {
 }
 
 .person-card {
+  width: 250px;
   background-color: #f8f8f8;
   border: 1px solid #ddd;
   border-radius: 8px;
   overflow: hidden;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   text-align: center;
-  padding: 1rem;
 }
 
 .person-image-container {
-  width: 150px;
-  height: 150px; 
+  width: 100%;
+  height: 200px;
   overflow: hidden;
-  display: flex;
-  justify-content: center;
-  align-items: center;
 }
 
 .person-image {
-   width: 100%;
+  width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: center;
+}
+
+.person-info {
+  padding: 1rem;
 }
 
 .person-info h2 {
-  font-size: 1.25rem;
-  margin-bottom: 0.5rem;
+  font-size: 1.5rem;
+  margin: 0.5rem 0;
 }
 
 .person-info p {
-  margin: 0.25rem 0;
+  margin: 0.5rem 0;
 }
 
 .detail-link {
@@ -95,7 +95,7 @@ main {
   margin-top: 1rem;
   padding: 0.5rem 1rem;
   background-color: #0073e6;
-  color: #fff;
+  color: white;
   text-decoration: none;
   border-radius: 4px;
 }
