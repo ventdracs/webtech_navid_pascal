@@ -18,6 +18,10 @@
         <button id="filterButton" class="filter-button">Filter</button>
         <a href="add-person.html" class="add-person-button">Add Person</a>
         <a href="add-category.html" class="add-category-button">Add Category</a>
+        <div id="auth">
+            <span id="loggedInUser"></span>
+            <button id="logoutButton" style="display: none;">Logout</button>
+        </div>
     </header>
 
     <main>
@@ -68,6 +72,21 @@
                 console.error('Fehler beim Laden der Personen:', error);
             }
         }
+
+        // Login-Status prüfen
+        const token = localStorage.getItem('token');
+        if (token) {
+            const username = localStorage.getItem('username');
+            document.getElementById('loggedInUser').textContent = `Hallo, ${username}`;
+            document.getElementById('logoutButton').style.display = 'block';
+        }
+
+        // Logout-Button
+        document.getElementById('logoutButton').addEventListener('click', () => {
+            localStorage.removeItem('token');
+            localStorage.removeItem('username');
+            window.location.reload();
+        });
 
         // Event-Listener für das Suchfeld
         document.getElementById('searchInput').addEventListener('keydown', (event) => {

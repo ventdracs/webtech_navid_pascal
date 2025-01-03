@@ -3,6 +3,10 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const path = require('path');
 const { Pool } = require('pg'); // PostgreSQL Client
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+const JWT_SECRET = 'geheimratsecken';
+
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -19,6 +23,24 @@ const pool = new Pool({
 
 // Statische Dateien bereitstellen
 app.use(express.static(path.join(__dirname, 'public')));
+
+// Middleware für geschützte Routen
+const authenticateToken = (req, res, next) => {
+    const authHeader = req.headers['authorization'];
+    const token = authHeader && authHeader.split(' ')[1];
+
+    if (!token) {
+        return res.status(401).json({ error: 'Kein Token bereitgestellt' });
+    }
+
+    jwt.verify(token, process.env.JWT_SECRET || JWT_SECRET, (err, user) => {
+        if (err) {
+            return res.status(403).json({ error: 'Ungültiges Token' });
+        }
+        req.user = user;
+        next();
+    });
+};
 
 // Test-Endpunkt für die Datenbankverbindung
 app.get('/api/test', async (req, res) => {
@@ -62,11 +84,8 @@ app.get('/api/person', async (req, res) => {
     }
 });
 
-
-
-
 // Person hinzufügen
-app.post('/api/person', async (req, res) => {
+app.post('/api/person', authenticateToken, async (req, res) => {
     const { name, age, height, image, categories } = req.body;
 
     console.log('Empfangene Daten:', req.body); // Debugging, um die Anfrage zu überprüfen
@@ -227,6 +246,61 @@ app.delete('/api/categories/:id', async (req, res) => {
         res.json({ message: 'Kategorie gelöscht', category: result.rows[0] });
     } catch (error) {
         console.error('Fehler beim Löschen der Kategorie:', error);
+        res.status(500).json({ error: 'Interner Serverfehler' });
+    }
+});
+
+
+// Nutzer registrieren
+app.post('/api/register', async (req, res) => {
+    const { username, password } = req.body;
+
+    if (!username || !password) {
+        return res.status(400).json({ error: 'Username und Passwort sind erforderlich' });
+    }
+
+    try {
+        const hashedPassword = await bcrypt.hash(password, 10); // Passwort hashen
+        const result = await pool.query(
+            'INSERT INTO users (username, password) VALUES ($1, $2) RETURNING id, username',
+            [username, hashedPassword]
+        );
+        res.status(201).json(result.rows[0]);
+    } catch (error) {
+        console.error('Fehler bei der Registrierung:', error);
+        res.status(500).json({ error: 'Interner Serverfehler' });
+    }
+});
+
+// Nutzer einloggen
+app.post('/api/login', async (req, res) => {
+    const { username, password } = req.body;
+
+    if (!username || !password) {
+        return res.status(400).json({ error: 'Username und Passwort sind erforderlich' });
+    }
+
+    try {
+        const result = await pool.query('SELECT * FROM users WHERE username = $1', [username]);
+        if (result.rows.length === 0) {
+            return res.status(401).json({ error: 'Ungültiger Benutzername oder Passwort' });
+        }
+
+        const user = result.rows[0];
+        const passwordMatch = await bcrypt.compare(password, user.password);
+
+        if (!passwordMatch) {
+            return res.status(401).json({ error: 'Ungültiger Benutzername oder Passwort' });
+        }
+
+        // JWT erstellen
+        const token = jwt.sign({ id: user.id, username: user.username }, process.env.JWT_SECRET, {
+            expiresIn: '1h',
+        });
+
+        res.json({ token, username: user.username });
+    } catch (error) {
+        console.error('Fehler beim Login:', error);
         res.status(500).json({ error: 'Interner Serverfehler' });
     }
 });
