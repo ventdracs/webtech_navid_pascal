@@ -40,7 +40,7 @@
 
                 persons.forEach(person => {
                     const categories = person.categories && person.categories.length > 0
-                        ? person.categories.map(cat => `<span class="category">${cat}</span>`).join('')
+                        ? person.categories.map(cat => `<span class="category">${cat}</span>`).join(' ')
                         : '<span class="category-none">Keine Kategorien</span>';
 
                     const personCard = `
