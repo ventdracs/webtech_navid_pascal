@@ -21,6 +21,7 @@
         <div id="auth">
             <span id="loggedInUser"></span>
             <button id="logoutButton" style="display: none;">Logout</button>
+            <a href="login.html" id="loginButton" class="login-button">Login</a>
         </div>
     </header>
 
@@ -79,6 +80,9 @@
             const username = localStorage.getItem('username');
             document.getElementById('loggedInUser').textContent = `Hallo, ${username}`;
             document.getElementById('logoutButton').style.display = 'block';
+            document.getElementById('loginButton').style.display = 'none';
+        } else {
+            document.getElementById('loginButton').style.display = 'block';
         }
 
         // Logout-Button
