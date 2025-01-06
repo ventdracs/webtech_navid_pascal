@@ -38,7 +38,7 @@
 
     <script>
         const apiUrl = '/api/person';
-        
+
         async function loadPersons() {
             try {
                 const response = await fetch(apiUrl);
@@ -49,7 +49,7 @@
                 persons.forEach(person => {
                     const categories = person.categories ? person.categories.join(', ') : 'Keine Kategorien';
                     const personCard = `
-                        <div class="person-card">
+                        <a href="person.html?id=${person.id}" class="person-card">
                             <div class="person-image-container">
                                 <img src="${person.image}" alt="Foto von ${person.name}" class="person-image" />
                             </div>
@@ -58,10 +58,8 @@
                                 <p><strong>Alter:</strong> ${person.age}</p>
                                 <p><strong>Größe:</strong> ${person.height} cm</p>
                                 <p><strong>Kategorien:</strong> ${categories}</p>
-                                <a href="edit-person.html?id=${person.id}" class="edit-link">Bearbeiten</a>
-                                <button class="delete-button" data-id="${person.id}">Löschen</button>
                             </div>
-                        </div>
+                        </a>
                     `;
                     peopleGrid.innerHTML += personCard;
                 });
@@ -70,25 +68,6 @@
                 alert('Personen konnten nicht geladen werden.');
             }
         }
-
-        document.addEventListener('click', async (event) => {
-            if (event.target.classList.contains('delete-button')) {
-                const personId = event.target.getAttribute('data-id');
-                if (confirm('Möchten Sie diese Person wirklich löschen?')) {
-                    try {
-                        const token = localStorage.getItem('token');
-                        await fetch(`${apiUrl}/${personId}`, {
-                            method: 'DELETE',
-                            headers: { Authorization: `Bearer ${token}` },
-                        });
-                        loadPersons();
-                    } catch (error) {
-                        console.error('Fehler beim Löschen der Person:', error);
-                        alert('Person konnte nicht gelöscht werden.');
-                    }
-                }
-            }
-        });
 
         const token = localStorage.getItem('token');
         if (token) {
