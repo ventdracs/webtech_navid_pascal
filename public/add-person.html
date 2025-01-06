@@ -1,106 +1,85 @@
-<!doctype html>
-<html lang="de">
+<!DOCTYPE html>
+<html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Add Person</title>
-  <link rel="stylesheet" href="style.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Person Hinzufügen</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <header>
-    <a href="index.html">
-      <img class="logo" src="logo2.png" alt="Logo" />
-    </a>
-    <h1>Justus Angels</h1>
-  </header>
-  
+    <header>
+        <a href="index.html">
+            <img class="logo" src="logo2.png" alt="Logo" />
+        </a>
+        <h1>Justus Angels</h1>
+        <input type="text" id="searchInput" class="search-bar" placeholder="Suchen..." />
+        <input type="number" id="minAge" class="filter-input" placeholder="Mindestalter" />
+        <input type="number" id="maxAge" class="filter-input" placeholder="Maximalalter" />
+        <button id="filterButton" class="filter-button">Filter</button>
+        <a href="add-person.html" class="add-person-button">Add Person</a>
+        <a href="add-category.html" class="add-category-button">Add Category</a>
+        <div id="auth">
+            <span id="loggedInUser"></span>
+            <button id="logoutButton" style="display: none;">Logout</button>
+            <a href="login.html" id="loginButton" class="login-button">Login</a>
+            <a href="register.html" id="registerButton" class="register-button">Registrieren</a>
+        </div>
+    </header>
 
-  <main>
-    <form id="addPersonForm" class="person-form">
-      <h2>Neue Person hinzufügen</h2>
-      <input type="text" id="name" placeholder="Name" required />
-      <input type="number" id="age" placeholder="Alter" required />
-      <input type="number" id="height" placeholder="Größe in cm" required />
-      
-      <label for="categories">Kategorien auswählen:</label>
-      <select id="categories" multiple>
-        <!-- Dynamisch geladene Kategorien -->
-      </select>
-      
-      <button type="submit">Hinzufügen</button>
-    </form>
-  </main>
+    <main>
+        <form id="addPersonForm" class="person-form">
+            <h2>Neue Person Hinzufügen</h2>
+            <input type="text" id="name" placeholder="Name" required />
+            <input type="number" id="age" placeholder="Alter" required />
+            <input type="number" id="height" placeholder="Größe (cm)" required />
+            <select id="categories" multiple>
+                <option value="1">Blond</option>
+                <option value="2">Braunhaarig</option>
+                <option value="3">Rothaarig</option>
+                <option value="4">Schwarzhaarig</option>
+            </select>
+            <button type="submit">Hinzufügen</button>
+        </form>
+    </main>
 
-  <footer>
-    <p><a href="Impressum.html">Impressum</a> | <a href="Kontakt.html">Kontakt</a></p>
-  </footer>
+    <footer>
+        <p><a href="Impressum.html">Impressum</a> | <a href="Kontakt.html">Kontakt</a></p>
+    </footer>
 
-  <script>
-    const apiUrl = '/api/person';
+    <script>
+        const token = localStorage.getItem('token');
+        if (token) {
+            const username = localStorage.getItem('username');
+            document.getElementById('loggedInUser').textContent = `Hallo, ${username}`;
+            document.getElementById('logoutButton').style.display = 'block';
+            document.getElementById('loginButton').style.display = 'none';
+            document.getElementById('registerButton').style.display = 'none';
+        } else {
+            document.getElementById('loginButton').style.display = 'block';
+            document.getElementById('registerButton').style.display = 'block';
+        }
 
-    async function loadCategories() {
-      try {
-        const response = await fetch('/api/categories');
-        const categories = await response.json();
-        const categorySelect = document.getElementById('categories');
-        categorySelect.innerHTML = '';
-
-        categories.forEach(category => {
-          const option = document.createElement('option');
-          option.value = category.id;
-          option.textContent = category.name;
-          categorySelect.appendChild(option);
+        document.getElementById('logoutButton').addEventListener('click', () => {
+            localStorage.removeItem('token');
+            localStorage.removeItem('username');
+            window.location.reload();
         });
-      } catch (error) {
-        console.error('Fehler beim Laden der Kategorien:', error);
-      }
-    }
 
-    document.getElementById('addPersonForm').addEventListener('submit', async (event) => {
-  event.preventDefault();
+        document.getElementById('searchInput').addEventListener('keydown', (event) => {
+            if (event.key === 'Enter') {
+                const searchTerm = event.target.value;
+                const minAge = document.getElementById('minAge').value;
+                const maxAge = document.getElementById('maxAge').value;
 
-  const token = localStorage.getItem('token');
-if (!token) {
-    alert('Bitte loggen Sie sich ein, um eine Person hinzuzufügen.');
-    console.log('Kein Token gefunden.');
-    return;
-}
+                const queryParams = new URLSearchParams({
+                    search: searchTerm,
+                    minAge: minAge,
+                    maxAge: maxAge
+                });
 
-
-  const selectedCategories = Array.from(document.getElementById('categories').selectedOptions)
-    .map(option => option.value);
-
-  const newPerson = {
-    name: document.getElementById('name').value,
-    age: document.getElementById('age').value,
-    height: document.getElementById('height').value,
-    categories: selectedCategories,
-  };
-
-  try {
-    const response = await fetch(apiUrl, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify(newPerson),
-    });
-
-    if (response.ok) {
-      alert('Person erfolgreich hinzugefügt!');
-      event.target.reset();
-    } else {
-      const errorData = await response.json();
-      alert(`Fehler: ${errorData.error}`);
-    }
-  } catch (error) {
-    console.error('Fehler beim Hinzufügen der Person:', error);
-    alert('Fehler beim Hinzufügen der Person.');
-  }
-});
-    // Kategorien beim Laden der Seite anzeigen
-    loadCategories();
-  </script>
+                window.location.href = `search-results.html?${queryParams}`;
+            }
+        });
+    </script>
 </body>
 </html>
