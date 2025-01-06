@@ -379,3 +379,14 @@ select[multiple] {
   background-color: #c82333;
 }
 
+/* Map Styling*/
+.map-container {
+  margin: 20px 0;
+  display: flex;
+  justify-content: center;
+}
+
+iframe {
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
