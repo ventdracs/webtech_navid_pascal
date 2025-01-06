@@ -67,6 +67,21 @@ main {
   overflow: hidden;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   text-align: center;
+  text-decoration: none; /* Entfernt Unterstreichung */
+  color: black; /* Textfarbe bleibt schwarz */
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.person-card:hover {
+  transform: scale(1.02);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+}
+
+.person-card:visited {
+  color: black; /* Auch bei besuchten Links bleibt die Farbe schwarz */
+}
+
+.person-card * {
+  color: inherit; /* Übernimmt die Farbe der Karte */
 }
 
 .person-image-container {
