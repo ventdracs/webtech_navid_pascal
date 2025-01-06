@@ -154,24 +154,38 @@ app.get('/api/person/:id', async (req, res) => {
 
 
 // Person aktualisieren
-app.put('/api/person/:id', async (req, res) => {
+app.put('/api/person/:id', authenticateToken, async (req, res) => {
     const { id } = req.params;
-    const { name, age, height } = req.body;
+    const { name, age, height, categories } = req.body;
 
     try {
-        const result = await pool.query(
-            'UPDATE persons SET name = $1, age = $2, height = $3 WHERE id = $4 RETURNING *',
+        const client = await pool.connect();
+        await client.query('BEGIN'); // Transaktion starten
+
+        await client.query(
+            'UPDATE persons SET name = $1, age = $2, height = $3 WHERE id = $4',
             [name, parseInt(age, 10), parseInt(height, 10), id]
         );
-        if (result.rows.length === 0) {
-            return res.status(404).json({ error: 'Person nicht gefunden' });
+
+        // Alte Kategorien löschen
+        await client.query('DELETE FROM person_categories WHERE person_id = $1', [id]);
+
+        // Neue Kategorien hinzufügen
+        for (const categoryId of categories) {
+            await client.query(
+                'INSERT INTO person_categories (person_id, category_id) VALUES ($1, $2)',
+                [id, categoryId]
+            );
         }
-        res.json(result.rows[0]);
+
+        await client.query('COMMIT');
+        res.status(200).json({ message: 'Person erfolgreich aktualisiert' });
     } catch (error) {
         console.error('Fehler beim Aktualisieren der Person:', error);
         res.status(500).json({ error: 'Interner Serverfehler' });
     }
 });
+
 
 // Person löschen
 app.delete('/api/person/:id', async (req, res) => {
