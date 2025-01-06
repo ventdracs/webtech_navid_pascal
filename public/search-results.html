@@ -11,10 +11,21 @@
         <a href="index.html">
             <img class="logo" src="logo2.png" alt="Logo" />
         </a>
-        <h1>Suchergebnisse</h1>
+        <h1>Justus Angels</h1>
+        <input type="text" id="searchInput" class="search-bar" placeholder="Suchen..." />
+        <input type="number" id="minAge" class="filter-input" placeholder="Mindestalter" />
+        <input type="number" id="maxAge" class="filter-input" placeholder="Maximalalter" />
+        <button id="filterButton" class="filter-button">Filter</button>
         <a href="add-person.html" class="add-person-button">Add Person</a>
         <a href="add-category.html" class="add-category-button">Add Category</a>
+        <div id="auth">
+            <span id="loggedInUser"></span>
+            <button id="logoutButton" style="display: none;">Logout</button>
+            <a href="login.html" id="loginButton" class="login-button">Login</a>
+            <a href="register.html" id="registerButton" class="register-button">Registrieren</a>
+        </div>
     </header>
+    
 
     <main>
         <div id="searchResultsGrid" class="people-grid"></div>
@@ -76,6 +87,42 @@
         }
 
         loadSearchResults();
+          // Login-Status prüfen
+    const token = localStorage.getItem('token');
+    if (token) {
+        const username = localStorage.getItem('username');
+        document.getElementById('loggedInUser').textContent = `Hallo, ${username}`;
+        document.getElementById('logoutButton').style.display = 'block';
+        document.getElementById('loginButton').style.display = 'none';
+        document.getElementById('registerButton').style.display = 'none';
+    } else {
+        document.getElementById('loginButton').style.display = 'block';
+        document.getElementById('registerButton').style.display = 'block';
+    }
+
+    // Logout-Button
+    document.getElementById('logoutButton').addEventListener('click', () => {
+        localStorage.removeItem('token');
+        localStorage.removeItem('username');
+        window.location.reload();
+    });
+
+    // Suchfeld-Event
+    document.getElementById('searchInput').addEventListener('keydown', (event) => {
+        if (event.key === 'Enter') { // Nur bei Enter-Taste
+            const searchTerm = event.target.value;
+            const minAge = document.getElementById('minAge').value;
+            const maxAge = document.getElementById('maxAge').value;
+
+            const queryParams = new URLSearchParams({
+                search: searchTerm,
+                minAge: minAge,
+                maxAge: maxAge
+            });
+
+            window.location.href = `search-results.html?${queryParams}`;
+        }
+    });
     </script>
 </body>
 </html>
