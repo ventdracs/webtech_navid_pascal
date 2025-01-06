@@ -350,3 +350,32 @@ select[multiple] {
 .filter-button:hover {
   background-color: #005bb5;
 }
+
+/* Styling für Add Kategorie Seite*/
+.edit-button, .delete-button {
+  display: inline-block;
+  margin: 0.5rem;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1rem;
+  color: #fff;
+}
+
+.edit-button {
+  background-color: #ffc107;
+}
+
+.edit-button:hover {
+  background-color: #e0a800;
+}
+
+.delete-button {
+  background-color: #dc3545;
+}
+
+.delete-button:hover {
+  background-color: #c82333;
+}
+

@@ -1,132 +1,152 @@
-<!doctype html>
-<html lang="de">
+<!DOCTYPE html>
+<html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Add Category</title>
-  <link rel="stylesheet" href="style.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kategorien verwalten</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <header>
-    <a href="index.html">
-        <img class="logo" src="logo2.png" alt="Logo" />
-    </a>
-    <h1>Justus Angels</h1>
-    <input type="text" id="searchInput" class="search-bar" placeholder="Suchen..." />
-    <input type="number" id="minAge" class="filter-input" placeholder="Mindestalter" />
-    <input type="number" id="maxAge" class="filter-input" placeholder="Maximalalter" />
-    <button id="filterButton" class="filter-button">Filter</button>
-    <a href="add-person.html" class="add-person-button">Add Person</a>
-    <a href="add-category.html" class="add-category-button">Add Category</a>
-    <div id="auth">
-        <span id="loggedInUser"></span>
-        <button id="logoutButton" style="display: none;">Logout</button>
-        <a href="login.html" id="loginButton" class="login-button">Login</a>
-        <a href="register.html" id="registerButton" class="register-button">Registrieren</a>
-    </div>
-</header>
+    <header>
+        <a href="index.html">
+            <img class="logo" src="logo2.png" alt="Logo" />
+        </a>
+        <h1>Justus Angels</h1>
+        <input type="text" id="searchInput" class="search-bar" placeholder="Suchen..." />
+        <input type="number" id="minAge" class="filter-input" placeholder="Mindestalter" />
+        <input type="number" id="maxAge" class="filter-input" placeholder="Maximalalter" />
+        <button id="filterButton" class="filter-button">Filter</button>
+        <a href="add-person.html" class="add-person-button">Add Person</a>
+        <a href="add-category.html" class="add-category-button">Add Category</a>
+        <div id="auth">
+            <span id="loggedInUser"></span>
+            <button id="logoutButton" style="display: none;">Logout</button>
+            <a href="login.html" id="loginButton" class="login-button">Login</a>
+            <a href="register.html" id="registerButton" class="register-button">Registrieren</a>
+        </div>
+    </header>
 
-  
-  <main>
-    <form id="addCategoryForm" class="person-form">
-      <h2>Neue Kategorie hinzufügen</h2>
-      <input type="text" id="newCategoryName" placeholder="Kategoriename" required />
-      <button type="submit">Hinzufügen</button>
-    </form>
-    <section id="categoryList" class="people-grid">
-      <!-- Dynamische Kategorie-Liste -->
-    </section>
-  </main>
+    <main>
+        <form id="addCategoryForm" class="category-form">
+            <h2>Neue Kategorie Hinzufügen</h2>
+            <input type="text" id="newCategoryName" placeholder="Kategoriename" required />
+            <button type="submit">Hinzufügen</button>
+        </form>
 
-  <footer>
-    <p><a href="Impressum.html">Impressum</a> | <a href="Kontakt.html">Kontakt</a></p>
-  </footer>
+        <div id="categoryList" class="category-list">
+            <!-- Kategorien werden hier dynamisch geladen -->
+        </div>
+    </main>
 
-  <script>
-    const categoryApiUrl = '/api/categories';
+    <footer>
+        <p><a href="Impressum.html">Impressum</a> | <a href="Kontakt.html">Kontakt</a></p>
+    </footer>
 
-    async function loadCategories() {
-      try {
-        const response = await fetch(categoryApiUrl);
-        const categories = await response.json();
-        const categoryList = document.getElementById('categoryList');
-        categoryList.innerHTML = '';
+    <script>
+        const categoryApiUrl = '/api/categories';
 
-        categories.forEach(category => {
-          const categoryCard = `
-            <div class="person-card">
-              <h2>${category.name}</h2>
-              <p>Anzahl der Personen: ${category.count}</p>
-            </div>
-          `;
-          categoryList.innerHTML += categoryCard;
-        });
-      } catch (error) {
-        console.error('Fehler beim Laden der Kategorien:', error);
-      }
-    }
+        // Kategorien laden
+        async function loadCategories() {
+            try {
+                const response = await fetch(categoryApiUrl);
+                const categories = await response.json();
+                const categoryList = document.getElementById('categoryList');
+                categoryList.innerHTML = '';
 
-    document.getElementById('addCategoryForm').addEventListener('submit', async (event) => {
-      event.preventDefault();
-      const newCategoryName = document.getElementById('newCategoryName').value.trim();
-
-      if (!newCategoryName) {
-        alert('Bitte einen Kategorienamen eingeben.');
-        return;
-      }
-
-      try {
-        await fetch(categoryApiUrl, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ name: newCategoryName }),
-        });
-
-        document.getElementById('newCategoryName').value = '';
-        loadCategories();
-      } catch (error) {
-        console.error('Fehler beim Hinzufügen der Kategorie:', error);
-        alert('Fehler beim Hinzufügen der Kategorie.');
-      }
-    });
-
-    loadCategories();
-     // Login-Status prüfen
-     const token = localStorage.getItem('token');
-    if (token) {
-        const username = localStorage.getItem('username');
-        document.getElementById('loggedInUser').textContent = `Hallo, ${username}`;
-        document.getElementById('logoutButton').style.display = 'block';
-        document.getElementById('loginButton').style.display = 'none';
-        document.getElementById('registerButton').style.display = 'none';
-    } else {
-        document.getElementById('loginButton').style.display = 'block';
-        document.getElementById('registerButton').style.display = 'block';
-    }
-
-    // Logout-Button
-    document.getElementById('logoutButton').addEventListener('click', () => {
-        localStorage.removeItem('token');
-        localStorage.removeItem('username');
-        window.location.reload();
-    });
-
-    // Suchfeld-Event
-    document.getElementById('searchInput').addEventListener('keydown', (event) => {
-        if (event.key === 'Enter') { // Nur bei Enter-Taste
-            const searchTerm = event.target.value;
-            const minAge = document.getElementById('minAge').value;
-            const maxAge = document.getElementById('maxAge').value;
-
-            const queryParams = new URLSearchParams({
-                search: searchTerm,
-                minAge: minAge,
-                maxAge: maxAge
-            });
-
-            window.location.href = `search-results.html?${queryParams}`;
+                categories.forEach(category => {
+                    const categoryCard = `
+                        <div class="person-card">
+                            <h2>${category.name}</h2>
+                            <p>Anzahl der Personen: ${category.count}</p>
+                            <button class="edit-button" data-id="${category.id}">Bearbeiten</button>
+                            <button class="delete-button" data-id="${category.id}">Löschen</button>
+                        </div>
+                    `;
+                    categoryList.innerHTML += categoryCard;
+                });
+            } catch (error) {
+                console.error('Fehler beim Laden der Kategorien:', error);
+                alert('Kategorien konnten nicht geladen werden.');
+            }
         }
-    });
-  </script>
+
+        // Event-Listener für Hinzufügen, Bearbeiten und Löschen
+        document.getElementById('addCategoryForm').addEventListener('submit', async (event) => {
+            event.preventDefault();
+            const newCategoryName = document.getElementById('newCategoryName').value.trim();
+
+            if (!newCategoryName) {
+                alert('Bitte einen Kategorienamen eingeben.');
+                return;
+            }
+
+            const token = localStorage.getItem('token');
+            if (!token) {
+                alert('Sie müssen eingeloggt sein, um Kategorien hinzuzufügen.');
+                return;
+            }
+
+            try {
+                await fetch(categoryApiUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: `Bearer ${token}`,
+                    },
+                    body: JSON.stringify({ name: newCategoryName }),
+                });
+
+                document.getElementById('newCategoryName').value = '';
+                loadCategories();
+            } catch (error) {
+                console.error('Fehler beim Hinzufügen der Kategorie:', error);
+                alert('Kategorie konnte nicht hinzugefügt werden.');
+            }
+        });
+
+        document.addEventListener('click', async (event) => {
+            if (event.target.classList.contains('delete-button')) {
+                const categoryId = event.target.getAttribute('data-id');
+                if (confirm('Möchten Sie diese Kategorie wirklich löschen?')) {
+                    try {
+                        const token = localStorage.getItem('token');
+                        await fetch(`${categoryApiUrl}/${categoryId}`, {
+                            method: 'DELETE',
+                            headers: { Authorization: `Bearer ${token}` },
+                        });
+                        loadCategories();
+                    } catch (error) {
+                        console.error('Fehler beim Löschen der Kategorie:', error);
+                        alert('Kategorie konnte nicht gelöscht werden.');
+                    }
+                }
+            }
+
+            if (event.target.classList.contains('edit-button')) {
+                const categoryId = event.target.getAttribute('data-id');
+                const newCategoryName = prompt('Neuer Name für die Kategorie:');
+                if (newCategoryName) {
+                    try {
+                        const token = localStorage.getItem('token');
+                        await fetch(`${categoryApiUrl}/${categoryId}`, {
+                            method: 'PUT',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                Authorization: `Bearer ${token}`,
+                            },
+                            body: JSON.stringify({ name: newCategoryName }),
+                        });
+                        loadCategories();
+                    } catch (error) {
+                        console.error('Fehler beim Bearbeiten der Kategorie:', error);
+                        alert('Kategorie konnte nicht bearbeitet werden.');
+                    }
+                }
+            }
+        });
+
+        // Kategorien laden beim Start
+        loadCategories();
+    </script>
 </body>
 </html>
