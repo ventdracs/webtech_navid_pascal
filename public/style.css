@@ -68,7 +68,7 @@ main {
 
 .person-card {
   width: 100%;
-  background-color: #f8f8f8;
+  background-color: #e0e0e0; /* Grauer Hintergrund */
   border: 1px solid #ddd;
   border-radius: 8px;
   overflow: hidden;
@@ -78,6 +78,7 @@ main {
   color: black;
   transition: transform 0.2s, box-shadow 0.2s;
 }
+
 .person-card:hover {
   transform: scale(1.02);
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
