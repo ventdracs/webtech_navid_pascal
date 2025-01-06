@@ -27,7 +27,9 @@
     </header>
 
     <main>
-        <div id="peopleGrid" class="people-grid"></div>
+        <div id="peopleGrid" class="people-grid">
+            <!-- Personen werden hier dynamisch geladen -->
+        </div>
     </main>
 
     <footer>
@@ -36,24 +38,16 @@
 
     <script>
         const apiUrl = '/api/person';
-
-        // Personen laden und in die Übersicht einfügen
+        
         async function loadPersons() {
             try {
                 const response = await fetch(apiUrl);
-                if (!response.ok) {
-                    throw new Error('Fehler beim Abrufen der Personen.');
-                }
                 const persons = await response.json();
                 const peopleGrid = document.getElementById('peopleGrid');
-
-                peopleGrid.innerHTML = ''; // Vorherigen Inhalt löschen
+                peopleGrid.innerHTML = '';
 
                 persons.forEach(person => {
-                    const categories = person.categories && person.categories.length > 0
-                        ? person.categories.map(cat => `<span class="category">${cat}</span>`).join(' ')
-                        : '<span class="category-none">Keine Kategorien</span>';
-
+                    const categories = person.categories ? person.categories.join(', ') : 'Keine Kategorien';
                     const personCard = `
                         <div class="person-card">
                             <div class="person-image-container">
@@ -64,7 +58,8 @@
                                 <p><strong>Alter:</strong> ${person.age}</p>
                                 <p><strong>Größe:</strong> ${person.height} cm</p>
                                 <p><strong>Kategorien:</strong> ${categories}</p>
-                                <a href="person.html?id=${person.id}" class="detail-link">Details ansehen</a>
+                                <a href="edit-person.html?id=${person.id}" class="edit-link">Bearbeiten</a>
+                                <button class="delete-button" data-id="${person.id}">Löschen</button>
                             </div>
                         </div>
                     `;
@@ -72,10 +67,29 @@
                 });
             } catch (error) {
                 console.error('Fehler beim Laden der Personen:', error);
+                alert('Personen konnten nicht geladen werden.');
             }
         }
 
-        // Login-Status prüfen
+        document.addEventListener('click', async (event) => {
+            if (event.target.classList.contains('delete-button')) {
+                const personId = event.target.getAttribute('data-id');
+                if (confirm('Möchten Sie diese Person wirklich löschen?')) {
+                    try {
+                        const token = localStorage.getItem('token');
+                        await fetch(`${apiUrl}/${personId}`, {
+                            method: 'DELETE',
+                            headers: { Authorization: `Bearer ${token}` },
+                        });
+                        loadPersons();
+                    } catch (error) {
+                        console.error('Fehler beim Löschen der Person:', error);
+                        alert('Person konnte nicht gelöscht werden.');
+                    }
+                }
+            }
+        });
+
         const token = localStorage.getItem('token');
         if (token) {
             const username = localStorage.getItem('username');
@@ -88,16 +102,14 @@
             document.getElementById('registerButton').style.display = 'block';
         }
 
-        // Logout-Button
         document.getElementById('logoutButton').addEventListener('click', () => {
             localStorage.removeItem('token');
             localStorage.removeItem('username');
             window.location.reload();
         });
 
-        // Event-Listener für das Suchfeld
         document.getElementById('searchInput').addEventListener('keydown', (event) => {
-            if (event.key === 'Enter') { // Nur bei Enter-Taste
+            if (event.key === 'Enter') {
                 const searchTerm = event.target.value;
                 const minAge = document.getElementById('minAge').value;
                 const maxAge = document.getElementById('maxAge').value;
@@ -112,22 +124,6 @@
             }
         });
 
-        // Weiterleitung zur Suchergebnisseite beim Klicken des Filter-Buttons
-        document.getElementById('filterButton').addEventListener('click', () => {
-            const searchTerm = document.getElementById('searchInput').value;
-            const minAge = document.getElementById('minAge').value;
-            const maxAge = document.getElementById('maxAge').value;
-
-            const queryParams = new URLSearchParams({
-                search: searchTerm,
-                minAge: minAge,
-                maxAge: maxAge
-            });
-
-            window.location.href = `search-results.html?${queryParams}`;
-        });
-
-        // Personen beim Laden der Seite abrufen
         loadPersons();
     </script>
 </body>

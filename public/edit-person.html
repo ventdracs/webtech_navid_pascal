@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Person Bearbeiten</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <a href="index.html">
+            <img class="logo" src="logo2.png" alt="Logo" />
+        </a>
+        <h1>Justus Angels</h1>
+    </header>
+
+    <main>
+        <form id="editPersonForm" class="person-form">
+            <h2>Person Bearbeiten</h2>
+            <input type="text" id="name" placeholder="Name" required />
+            <input type="number" id="age" placeholder="Alter" required />
+            <input type="number" id="height" placeholder="Größe (cm)" required />
+            <select id="categories" multiple></select>
+            <button type="submit">Änderungen Speichern</button>
+        </form>
+    </main>
+
+    <script>
+        const personApiUrl = '/api/person';
+        const categoryApiUrl = '/api/categories';
+        const personId = new URLSearchParams(window.location.search).get('id');
+
+        async function loadPersonAndCategories() {
+            try {
+                const [personResponse, categoryResponse] = await Promise.all([
+                    fetch(`${personApiUrl}/${personId}`),
+                    fetch(categoryApiUrl)
+                ]);
+
+                const person = await personResponse.json();
+                const categories = await categoryResponse.json();
+
+                document.getElementById('name').value = person.name;
+                document.getElementById('age').value = person.age;
+                document.getElementById('height').value = person.height;
+
+                const categorySelect = document.getElementById('categories');
+                categorySelect.innerHTML = categories.map(cat => `
+                    <option value="${cat.id}" ${person.categories.includes(cat.name) ? 'selected' : ''}>
+                        ${cat.name}
+                    </option>
+                `).join('');
+            } catch (error) {
+                console.error('Fehler beim Laden der Person oder Kategorien:', error);
+            }
+        }
+
+        document.getElementById('editPersonForm').addEventListener('submit', async (event) => {
+            event.preventDefault();
+            const name = document.getElementById('name').value.trim();
+            const age = parseInt(document.getElementById('age').value, 10);
+            const height = parseInt(document.getElementById('height').value, 10);
+            const selectedCategories = Array.from(document.getElementById('categories').selectedOptions).map(opt => opt.value);
+
+            try {
+                const token = localStorage.getItem('token');
+                await fetch(`${personApiUrl}/${personId}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: `Bearer ${token}`,
+                    },
+                    body: JSON.stringify({ name, age, height, categories: selectedCategories }),
+                });
+                alert('Änderungen gespeichert!');
+                window.location.href = 'index.html';
+            } catch (error) {
+                console.error('Fehler beim Speichern der Änderungen:', error);
+                alert('Änderungen konnten nicht gespeichert werden.');
+            }
+        });
+
+        loadPersonAndCategories();
+    </script>
+</body>
+</html>
