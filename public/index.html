@@ -92,29 +92,35 @@
             });
         }
 
-   // Event-Listener für Suche
-document.getElementById('searchInput').addEventListener('keydown', (event) => {
-    if (event.key === 'Enter') {
-        const searchTerm = event.target.value.trim();
-        const minAge = document.getElementById('minAge').value.trim(); // Mindestalter
-        const maxAge = document.getElementById('maxAge').value.trim(); // Maximalalter
+        // Event-Listener für Suche
+        document.getElementById('searchInput').addEventListener('keydown', (event) => {
+            if (event.key === 'Enter') {
+                const searchTerm = event.target.value;
+                const queryParams = new URLSearchParams({ search: searchTerm });
+                window.location.href = `search-results.html?${queryParams}`;
+            }
+        });
 
-        // Query-Parameter erstellen
-        const queryParams = new URLSearchParams();
+        // Event-Listener für Filter-Button
+document.getElementById('filterButton').addEventListener('click', () => {
+    const minAge = document.getElementById('minAge').value.trim();
+    const maxAge = document.getElementById('maxAge').value.trim();
+    const searchTerm = document.getElementById('searchInput').value.trim();
 
-        if (searchTerm) {
-            queryParams.append('search', searchTerm);
-        }
-        if (minAge) {
-            queryParams.append('minAge', minAge);
-        }
-        if (maxAge) {
-            queryParams.append('maxAge', maxAge);
-        }
+    const queryParams = new URLSearchParams();
 
-        // Weiterleitung mit Query-Parametern
-        window.location.href = `search-results.html?${queryParams}`;
+    if (searchTerm) {
+        queryParams.append('search', searchTerm);
     }
+    if (minAge) {
+        queryParams.append('minAge', minAge);
+    }
+    if (maxAge) {
+        queryParams.append('maxAge', maxAge);
+    }
+
+    // Weiterleitung mit Filter-Parametern
+    window.location.href = `search-results.html?${queryParams}`;
 });
 
 
