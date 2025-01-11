@@ -81,10 +81,26 @@
             }
 
             const token = localStorage.getItem('token');
-            if (!token) {
-                alert('Sie müssen eingeloggt sein, um Kategorien hinzuzufügen.');
-                return;
-            }
+if (token) {
+    const username = localStorage.getItem('username');
+    document.getElementById('loggedInUser').textContent = `Hallo, ${username}`;
+    document.getElementById('logoutButton').style.display = 'block';
+    document.getElementById('loginButton').style.display = 'none';
+    document.getElementById('registerButton').style.display = 'none';
+    document.querySelector('.add-category-button').style.display = 'inline-block';
+} else {
+    document.getElementById('loginButton').style.display = 'block';
+    document.getElementById('registerButton').style.display = 'block';
+    alert('Sie müssen eingeloggt sein, um diese Seite zu nutzen.');
+    window.location.href = 'login.html'; // Weiterleitung zur Login-Seite
+}
+
+// Logout-Button Funktionalität
+document.getElementById('logoutButton').addEventListener('click', () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('username');
+    window.location.reload();
+});
 
             try {
                 await fetch(categoryApiUrl, {
