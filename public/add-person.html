@@ -50,88 +50,94 @@
 
   <script>
     const apiUrl = '/api/person';
+    const token = localStorage.getItem('token'); // Einmal global definieren
 
+    // Login-Status prüfen und Elemente initialisieren
+    function initializeLoginState() {
+        if (token) {
+            const username = localStorage.getItem('username');
+            document.getElementById('loggedInUser').textContent = `Hallo, ${username}`;
+            document.getElementById('logoutButton').style.display = 'block';
+            document.getElementById('loginButton').style.display = 'none';
+            document.getElementById('registerButton').style.display = 'none';
+
+            // Add Category Button anzeigen
+            const addCategoryButton = document.querySelector('.add-category-button');
+            if (addCategoryButton) {
+                addCategoryButton.style.display = 'inline-block';
+            }
+        } else {
+            document.getElementById('loginButton').style.display = 'block';
+            document.getElementById('registerButton').style.display = 'block';
+
+            // Add Category Button verstecken
+            const addCategoryButton = document.querySelector('.add-category-button');
+            if (addCategoryButton) {
+                addCategoryButton.style.display = 'none';
+            }
+        }
+    }
+
+    // Kategorien laden
     async function loadCategories() {
-      try {
-        const response = await fetch('/api/categories');
-        const categories = await response.json();
-        const categorySelect = document.getElementById('categories');
-        categorySelect.innerHTML = '';
+        try {
+            const response = await fetch('/api/categories');
+            const categories = await response.json();
+            const categorySelect = document.getElementById('categories');
+            categorySelect.innerHTML = '';
 
-        categories.forEach(category => {
-          const option = document.createElement('option');
-          option.value = category.id;
-          option.textContent = category.name;
-          categorySelect.appendChild(option);
-        });
-      } catch (error) {
-        console.error('Fehler beim Laden der Kategorien:', error);
-      }
+            categories.forEach(category => {
+                const option = document.createElement('option');
+                option.value = category.id;
+                option.textContent = category.name;
+                categorySelect.appendChild(option);
+            });
+        } catch (error) {
+            console.error('Fehler beim Laden der Kategorien:', error);
+        }
     }
 
+    // Personen hinzufügen
     document.getElementById('addPersonForm').addEventListener('submit', async (event) => {
-  event.preventDefault();
+        event.preventDefault();
 
-  const token = localStorage.getItem('token');
+        if (!token) {
+            alert('Bitte loggen Sie sich ein, um Personen hinzuzufügen.');
+            return;
+        }
 
-// Login-Status prüfen und entsprechend anzeigen
-if (token) {
-    const username = localStorage.getItem('username');
-    document.getElementById('loggedInUser').textContent = `Hallo, ${username}`;
-    document.getElementById('logoutButton').style.display = 'block';
-    document.getElementById('loginButton').style.display = 'none';
-    document.getElementById('registerButton').style.display = 'none';
-    document.querySelector('.add-category-button').style.display = 'inline-block';
-} else {
-    document.getElementById('loginButton').style.display = 'block';
-    document.getElementById('registerButton').style.display = 'block';
-}
+        const selectedCategories = Array.from(document.getElementById('categories').selectedOptions)
+            .map(option => option.value);
 
+        const newPerson = {
+            name: document.getElementById('name').value,
+            age: document.getElementById('age').value,
+            height: document.getElementById('height').value,
+            categories: selectedCategories,
+        };
 
-  const selectedCategories = Array.from(document.getElementById('categories').selectedOptions)
-    .map(option => option.value);
+        try {
+            const response = await fetch(apiUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${token}`,
+                },
+                body: JSON.stringify(newPerson),
+            });
 
-  const newPerson = {
-    name: document.getElementById('name').value,
-    age: document.getElementById('age').value,
-    height: document.getElementById('height').value,
-    categories: selectedCategories,
-  };
-
-  try {
-    const response = await fetch(apiUrl, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify(newPerson),
+            if (response.ok) {
+                alert('Person erfolgreich hinzugefügt!');
+                event.target.reset();
+            } else {
+                const errorData = await response.json();
+                alert(`Fehler: ${errorData.error}`);
+            }
+        } catch (error) {
+            console.error('Fehler beim Hinzufügen der Person:', error);
+            alert('Fehler beim Hinzufügen der Person.');
+        }
     });
-
-    if (response.ok) {
-      alert('Person erfolgreich hinzugefügt!');
-      event.target.reset();
-    } else {
-      const errorData = await response.json();
-      alert(`Fehler: ${errorData.error}`);
-    }
-  } catch (error) {
-    console.error('Fehler beim Hinzufügen der Person:', error);
-    alert('Fehler beim Hinzufügen der Person.');
-  }
-});
-     // Login-Status prüfen
-     const token = localStorage.getItem('token');
-    if (token) {
-        const username = localStorage.getItem('username');
-        document.getElementById('loggedInUser').textContent = `Hallo, ${username}`;
-        document.getElementById('logoutButton').style.display = 'block';
-        document.getElementById('loginButton').style.display = 'none';
-        document.getElementById('registerButton').style.display = 'none';
-    } else {
-        document.getElementById('loginButton').style.display = 'block';
-        document.getElementById('registerButton').style.display = 'block';
-    }
 
     // Logout-Button
     document.getElementById('logoutButton').addEventListener('click', () => {
@@ -150,14 +156,16 @@ if (token) {
             const queryParams = new URLSearchParams({
                 search: searchTerm,
                 minAge: minAge,
-                maxAge: maxAge
+                maxAge: maxAge,
             });
 
             window.location.href = `search-results.html?${queryParams}`;
         }
     });
-     // Kategorien beim Laden der Seite anzeigen
-     loadCategories();
-  </script>
+
+    // Initialisierung
+    initializeLoginState(); // Login-Status prüfen und Buttons initialisieren
+    loadCategories();       // Kategorien laden
+</script>
 </body>
 </html>
