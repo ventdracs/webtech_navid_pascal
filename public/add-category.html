@@ -180,6 +180,16 @@
                 }
             }
         });
+
+        // Logout-Button Funktionalität
+document.getElementById('logoutButton').addEventListener('click', () => {
+    // Token und Benutzername aus localStorage entfernen
+    localStorage.removeItem('token');
+    localStorage.removeItem('username');
+    
+    // Seite neu laden, um den Login-Status zu aktualisieren
+    window.location.reload();
+});
     
         // Kategorien laden beim Start
         loadCategories();
