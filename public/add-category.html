@@ -145,6 +145,19 @@
             }
         });
 
+        // Event-Listener für Suchfeld
+        document.getElementById('searchInput').addEventListener('keydown', (event) => {
+                if (event.key === 'Enter') {
+                    const searchTerm = event.target.value.trim();
+                    if (searchTerm) {
+                        const queryParams = new URLSearchParams({ search: searchTerm });
+                        window.location.href = `search-results.html?${queryParams}`;
+                    } else {
+                        alert('Bitte geben Sie einen Suchbegriff ein.');
+                    }
+                }
+            });
+
         // Kategorien laden beim Start
         loadCategories();
     </script>
