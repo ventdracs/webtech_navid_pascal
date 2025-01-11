@@ -45,6 +45,29 @@
     <script>
         const categoryApiUrl = '/api/categories';
 
+        // Login-Status prüfen und Elemente entsprechend anzeigen
+        const token = localStorage.getItem('token');
+        if (token) {
+            const username = localStorage.getItem('username');
+            document.getElementById('loggedInUser').textContent = `Hallo, ${username}`;
+            document.getElementById('logoutButton').style.display = 'block';
+            document.getElementById('loginButton').style.display = 'none';
+            document.getElementById('registerButton').style.display = 'none';
+            document.querySelector('.add-category-button').style.display = 'inline-block';
+        } else {
+            document.getElementById('loginButton').style.display = 'block';
+            document.getElementById('registerButton').style.display = 'block';
+            alert('Sie müssen eingeloggt sein, um diese Seite zu nutzen.');
+            window.location.href = 'login.html'; // Weiterleitung zur Login-Seite
+        }
+
+        // Logout-Button Funktionalität
+        document.getElementById('logoutButton').addEventListener('click', () => {
+            localStorage.removeItem('token');
+            localStorage.removeItem('username');
+            window.location.reload();
+        });
+
         // Kategorien laden
         async function loadCategories() {
             try {
@@ -70,109 +93,18 @@
             }
         }
 
-        // Event-Listener für Hinzufügen, Bearbeiten und Löschen
-        document.getElementById('addCategoryForm').addEventListener('submit', async (event) => {
-            event.preventDefault();
-            const newCategoryName = document.getElementById('newCategoryName').value.trim();
-
-            if (!newCategoryName) {
-                alert('Bitte einen Kategorienamen eingeben.');
-                return;
-            }
-
-            const token = localStorage.getItem('token');
-if (token) {
-    const username = localStorage.getItem('username');
-    document.getElementById('loggedInUser').textContent = `Hallo, ${username}`;
-    document.getElementById('logoutButton').style.display = 'block';
-    document.getElementById('loginButton').style.display = 'none';
-    document.getElementById('registerButton').style.display = 'none';
-    document.querySelector('.add-category-button').style.display = 'inline-block';
-} else {
-    document.getElementById('loginButton').style.display = 'block';
-    document.getElementById('registerButton').style.display = 'block';
-    alert('Sie müssen eingeloggt sein, um diese Seite zu nutzen.');
-    window.location.href = 'login.html'; // Weiterleitung zur Login-Seite
-}
-
-// Logout-Button Funktionalität
-document.getElementById('logoutButton').addEventListener('click', () => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('username');
-    window.location.reload();
-});
-
-            try {
-                await fetch(categoryApiUrl, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        Authorization: `Bearer ${token}`,
-                    },
-                    body: JSON.stringify({ name: newCategoryName }),
-                });
-
-                document.getElementById('newCategoryName').value = '';
-                loadCategories();
-            } catch (error) {
-                console.error('Fehler beim Hinzufügen der Kategorie:', error);
-                alert('Kategorie konnte nicht hinzugefügt werden.');
-            }
-        });
-
-        document.addEventListener('click', async (event) => {
-            if (event.target.classList.contains('delete-button')) {
-                const categoryId = event.target.getAttribute('data-id');
-                if (confirm('Möchten Sie diese Kategorie wirklich löschen?')) {
-                    try {
-                        const token = localStorage.getItem('token');
-                        await fetch(`${categoryApiUrl}/${categoryId}`, {
-                            method: 'DELETE',
-                            headers: { Authorization: `Bearer ${token}` },
-                        });
-                        loadCategories();
-                    } catch (error) {
-                        console.error('Fehler beim Löschen der Kategorie:', error);
-                        alert('Kategorie konnte nicht gelöscht werden.');
-                    }
-                }
-            }
-
-            if (event.target.classList.contains('edit-button')) {
-                const categoryId = event.target.getAttribute('data-id');
-                const newCategoryName = prompt('Neuer Name für die Kategorie:');
-                if (newCategoryName) {
-                    try {
-                        const token = localStorage.getItem('token');
-                        await fetch(`${categoryApiUrl}/${categoryId}`, {
-                            method: 'PUT',
-                            headers: {
-                                'Content-Type': 'application/json',
-                                Authorization: `Bearer ${token}`,
-                            },
-                            body: JSON.stringify({ name: newCategoryName }),
-                        });
-                        loadCategories();
-                    } catch (error) {
-                        console.error('Fehler beim Bearbeiten der Kategorie:', error);
-                        alert('Kategorie konnte nicht bearbeitet werden.');
-                    }
-                }
-            }
-        });
-
         // Event-Listener für Suchfeld
         document.getElementById('searchInput').addEventListener('keydown', (event) => {
-                if (event.key === 'Enter') {
-                    const searchTerm = event.target.value.trim();
-                    if (searchTerm) {
-                        const queryParams = new URLSearchParams({ search: searchTerm });
-                        window.location.href = `search-results.html?${queryParams}`;
-                    } else {
-                        alert('Bitte geben Sie einen Suchbegriff ein.');
-                    }
+            if (event.key === 'Enter') {
+                const searchTerm = event.target.value.trim();
+                if (searchTerm) {
+                    const queryParams = new URLSearchParams({ search: searchTerm });
+                    window.location.href = `search-results.html?${queryParams}`;
+                } else {
+                    alert('Bitte geben Sie einen Suchbegriff ein.');
                 }
-            });
+            }
+        });
 
         // Kategorien laden beim Start
         loadCategories();
