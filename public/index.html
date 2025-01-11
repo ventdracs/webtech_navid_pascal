@@ -92,24 +92,31 @@
             });
         }
 
-        // Event-Listener für Suche
+   // Event-Listener für Suche
 document.getElementById('searchInput').addEventListener('keydown', (event) => {
     if (event.key === 'Enter') {
-        const searchTerm = event.target.value;
-        const minAge = document.getElementById('minAge')?.value; // Mindestalter
-        const maxAge = document.getElementById('maxAge')?.value; // Maximalalter
+        const searchTerm = event.target.value.trim();
+        const minAge = document.getElementById('minAge').value.trim(); // Mindestalter
+        const maxAge = document.getElementById('maxAge').value.trim(); // Maximalalter
 
         // Query-Parameter erstellen
-        const queryParams = new URLSearchParams({
-            search: searchTerm,
-            ...(minAge && { minAge }), // Nur hinzufügen, wenn ein Wert gesetzt ist
-            ...(maxAge && { maxAge }), // Nur hinzufügen, wenn ein Wert gesetzt ist
-        });
+        const queryParams = new URLSearchParams();
+
+        if (searchTerm) {
+            queryParams.append('search', searchTerm);
+        }
+        if (minAge) {
+            queryParams.append('minAge', minAge);
+        }
+        if (maxAge) {
+            queryParams.append('maxAge', maxAge);
+        }
 
         // Weiterleitung mit Query-Parametern
         window.location.href = `search-results.html?${queryParams}`;
     }
 });
+
 
         loadPersons();
     </script>
