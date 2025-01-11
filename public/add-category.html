@@ -45,6 +45,26 @@
     <script>
         const categoryApiUrl = '/api/categories';
     
+        // Login-Status beim Laden der Seite prüfen
+        document.addEventListener('DOMContentLoaded', () => {
+            const token = localStorage.getItem('token');
+            if (token) {
+                const username = localStorage.getItem('username');
+                document.getElementById('loggedInUser').textContent = `Hallo, ${username}`;
+                document.getElementById('logoutButton').style.display = 'block';
+                document.getElementById('loginButton').style.display = 'none';
+                document.getElementById('registerButton').style.display = 'none';
+    
+                const addCategoryButton = document.querySelector('.add-category-button');
+                if (addCategoryButton) {
+                    addCategoryButton.style.display = 'inline-block';
+                }
+            } else {
+                document.getElementById('loginButton').style.display = 'block';
+                document.getElementById('registerButton').style.display = 'block';
+            }
+        });
+    
         // Kategorien laden
         async function loadCategories() {
             try {
@@ -83,18 +103,10 @@
             }
     
             const token = localStorage.getItem('token');
-            if (token) {
-                const username = localStorage.getItem('username');
-                document.getElementById('loggedInUser').textContent = `Hallo, ${username}`;
-                document.getElementById('logoutButton').style.display = 'block';
-                document.getElementById('loginButton').style.display = 'none';
-                document.getElementById('registerButton').style.display = 'none';
-                document.querySelector('.add-category-button').style.display = 'inline-block';
-            } else {
-                document.getElementById('loginButton').style.display = 'block';
-                document.getElementById('registerButton').style.display = 'block';
-                alert('Sie müssen eingeloggt sein, um diese Seite zu nutzen.');
-                window.location.href = 'login.html'; // Weiterleitung zur Login-Seite
+            if (!token) {
+                alert('Sie müssen eingeloggt sein, um Kategorien hinzuzufügen.');
+                window.location.href = 'login.html';
+                return;
             }
     
             try {
@@ -172,6 +184,7 @@
         // Kategorien laden beim Start
         loadCategories();
     </script>
+    
     
 </body>
 </html>
