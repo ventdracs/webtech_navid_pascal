@@ -51,19 +51,16 @@ main {
 /* Style für PLP
 */
 .people-grid {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 1.5rem;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); /* Vier Spalten */
+  gap: 1.5rem; /* Abstand zwischen den Karten */
   padding: 1rem;
   max-width: 1200px;
   margin: 0 auto;
 }
 
 .person-card-container {
-  position: relative;
-  width: 250px;
-  margin: 1rem;
+  width: 100%; /* Breite anpassen, damit sie ins Grid passt */
 }
 
 .person-card {
