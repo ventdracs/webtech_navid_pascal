@@ -120,9 +120,6 @@ if (token) {
     alert('Fehler beim Hinzufügen der Person.');
   }
 });
-    // Kategorien beim Laden der Seite anzeigen
-    loadCategories();
-
      // Login-Status prüfen
      const token = localStorage.getItem('token');
     if (token) {
@@ -159,6 +156,8 @@ if (token) {
             window.location.href = `search-results.html?${queryParams}`;
         }
     });
+     // Kategorien beim Laden der Seite anzeigen
+     loadCategories();
   </script>
 </body>
 </html>
