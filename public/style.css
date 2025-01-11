@@ -53,114 +53,108 @@ main {
 .people-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr); /* Vier Spalten */
-  gap: 1.5rem; /* Abstand zwischen den Karten */
-  padding: 1rem;
-  max-width: 1200px;
+  gap: 2rem; /* Größerer Abstand zwischen Karten */
+  padding: 2rem;
+  max-width: 1400px;
   margin: 0 auto;
 }
 
 .person-card-container {
-  width: 100%; /* Breite anpassen, damit sie ins Grid passt */
+  position: relative;
+  width: 100%; /* Passt sich der Grid-Spalte an */
 }
 
 .person-card {
-  width: 200px; /* Reduzierte Breite */
-  background-color: hwb(0 0% 45%); /* Grauer Hintergrund */
-  border: 1px solid hsl(0, 0%, 0%);
-  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #f9f9f9; /* Weicher Hintergrund */
+  border: 1px solid #ddd;
+  border-radius: 12px; /* Stärkere Abrundung */
   overflow: hidden;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  text-align: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   text-decoration: none;
-  color: black;
+  color: #333; /* Dunkleres Grau */
   transition: transform 0.2s, box-shadow 0.2s;
+  padding: 1rem;
 }
 
 .person-card:hover {
-  transform: scale(1.02);
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
-}
-
-.person-card:visited {
-  color: black; /* Auch bei besuchten Links bleibt die Farbe schwarz */
-}
-
-.person-card * {
-  color: inherit; /* Übernimmt die Farbe der Karte */
-}
-
-.card-actions {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 0.5rem;
+  transform: translateY(-5px); /* Leichter Schwebeeffekt */
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
 }
 
 .person-image-container {
   width: 100%;
-  height: auto;
+  height: 200px;
   overflow: hidden;
+  border-bottom: 1px solid #ddd;
 }
 
 .person-image {
   width: 100%;
-  height: auto;
-  object-fit: cover;
+  height: 100%;
+  object-fit: cover; /* Füllt die Box aus */
+  border-radius: 12px 12px 0 0; /* Gleiche Abrundung wie die Karte */
 }
 
 .person-info {
   padding: 1rem;
+  text-align: center;
 }
 
 .person-info h2 {
-  font-size: 1.5rem;
+  font-size: 1.25rem;
   margin: 0.5rem 0;
+  color: #0073e6; /* Akzentfarbe */
 }
 
 .person-info p {
-  margin: 0.5rem 0;
+  margin: 0.25rem 0;
+  font-size: 0.95rem;
+  color: #555;
 }
 
 .detail-link {
   display: inline-block;
   margin-top: 1rem;
   padding: 0.5rem 1rem;
-  background-color: #0073e6;
-  color: white;
+  background-color: #0073e6; /* Blau als Hauptfarbe */
+  color: #fff;
   text-decoration: none;
   border-radius: 4px;
+  font-weight: bold;
 }
 
 .detail-link:hover {
   background-color: #005bb5;
 }
-.person-card-container {
-  position: relative;
-  width: 250px;
-  margin: 1rem;
-}
 
 .card-actions {
   display: flex;
   justify-content: space-between;
-  margin-top: 0.5rem;
+  width: 100%;
+  padding: 0.5rem 1rem;
+  border-top: 1px solid #ddd;
 }
 
-.edit-button, .delete-button {
+.edit-button,
+.delete-button {
   display: inline-block;
-  padding: 0.5rem 1rem;
+  padding: 0.5rem 0.75rem;
   border: none;
   border-radius: 4px;
   cursor: pointer;
-  font-size: 1rem;
+  font-size: 0.85rem;
   color: #fff;
 }
 
 .edit-button {
-  background-color: #ffc107;
+  background-color: #28a745;
 }
 
 .edit-button:hover {
-  background-color: #e0a800;
+  background-color: #218838;
 }
 
 .delete-button {
@@ -169,6 +163,29 @@ main {
 
 .delete-button:hover {
   background-color: #c82333;
+}
+
+@media (max-width: 1024px) {
+  .people-grid {
+    grid-template-columns: repeat(3, 1fr); /* Drei Spalten auf Tablets */
+  }
+}
+
+@media (max-width: 768px) {
+  .people-grid {
+    grid-template-columns: repeat(2, 1fr); /* Zwei Spalten auf kleinen Bildschirmen */
+  }
+}
+
+@media (max-width: 480px) {
+  .people-grid {
+    grid-template-columns: 1fr; /* Eine Spalte auf Handys */
+  }
+
+  .person-card {
+    padding: 1rem;
+    font-size: 0.9rem;
+  }
 }
 
 /* Style für PDP
