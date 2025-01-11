@@ -17,7 +17,7 @@
         <input type="number" id="maxAge" class="filter-input" placeholder="Maximalalter" />
         <button id="filterButton" class="filter-button">Filter</button>
         <a href="add-person.html" class="add-person-button">Add Person</a>
-        <a href="add-category.html" class="add-category-button">Add Category</a>
+        <a href="add-category.html" class="add-category-button" style="display: none;">Add Category</a>
         <div id="auth">
             <span id="loggedInUser"></span>
             <button id="logoutButton" style="display: none;">Logout</button>
@@ -54,6 +54,7 @@
                 document.getElementById('logoutButton').style.display = 'block';
                 document.getElementById('loginButton').style.display = 'none';
                 document.getElementById('registerButton').style.display = 'none';
+                document.querySelector('.add-category-button').style.display = 'inline-block';
     
                 const addCategoryButton = document.querySelector('.add-category-button');
                 if (addCategoryButton) {
