@@ -214,7 +214,7 @@ main {
   border-radius: 0%;
   margin-bottom: 1.5rem;
   position: absolute;
-  left: 15%; /* Positioniert das Bild an der linken Seite des Containers */
+  left: 10%; /* Positioniert das Bild an der linken Seite des Containers */
   top: 50%; /* Optional: vertikale Zentrierung */
   transform: translateY(-50%); /* Optional: vertikale Anpassung */
 }
