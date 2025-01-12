@@ -220,6 +220,7 @@ main {
   top: 50%; /* Optional: vertikale Zentrierung */
   transform: translateY(-50%); /* Optional: vertikale Anpassung */
 }
+
 .person-detail-text {
   background-color: #ffffff; /* Weicher Hintergrund wie Karte */
   border: 1px solid #e0e0e0;

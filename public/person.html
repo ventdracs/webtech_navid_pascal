@@ -53,17 +53,19 @@
                     ? person.categories.join(', ')
                     : 'Keine Kategorien';
 
-                personDetail.innerHTML = `
-                    <img src="${person.image}" alt="Foto von ${person.name}" class="person-image-large" />
-                    <h2>${person.name}</h2>
-                    <ul>
-                        <li><strong>Name:</strong> ${person.name}</li>
-                        <li><strong>Alter:</strong> ${person.age}</li>
-                        <li><strong>Größe:</strong> ${person.height} cm</li>
-                        <li><strong>Haarfarbe:</strong> ${categories}</li>
-                    </ul>
-                    <a href="index.html" class="back-link">Zurück zur Übersicht</a>
-                `;
+                    personDetail.innerHTML = `
+  <img src="${person.image}" alt="Foto von ${person.name}" class="person-image-large" />
+  <div class="person-detail-text">
+    <h2>${person.name}</h2>
+    <ul>
+      <li><strong>Alter:</strong> ${person.age}</li>
+      <li><strong>Größe:</strong> ${person.height} cm</li>
+      <li><strong>Haarfarbe:</strong> ${categories}</li>
+    </ul>
+    <a href="index.html" class="back-link">Zurück zur Übersicht</a>
+  </div>
+`;
+
             } catch (error) {
                 console.error('Fehler beim Laden der Personendetails:', error);
             }
