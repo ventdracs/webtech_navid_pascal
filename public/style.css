@@ -297,23 +297,6 @@ button[type="submit"]:hover {
   background-color: #005bb5;
 }
 
-/* Styling für add-person Button
-*/
-.add-person-button {
-  display: inline-block;
-  padding: 0.5rem 1rem;
-  margin-left: auto;
-  background-color: #0073e6;
-  color: #fff;
-  text-decoration: none;
-  border-radius: 4px;
-  font-size: 1rem;
-}
-
-.add-person-button:hover {
-  background-color: #005bb5;
-}
-
 /* Sytyling für add-person Seite
 */
 .person-form {
@@ -362,21 +345,6 @@ header .logo {
   max-height: 6rem;
   max-width: 6rem;
 }
-/* Styling für add category button*/
-.add-category-button {
-  display: inline-block;
-  padding: 0.5rem 1rem;
-  background-color: #28a745;
-  color: #fff;
-  text-decoration: none;
-  border-radius: 4px;
-  font-size: 1rem;
-  margin-left: 0.5rem;
-}
-
-.add-category-button:hover {
-  background-color: #218838;
-}
 
 /*category Feld styling vom select*/
 select[multiple] {
@@ -421,29 +389,6 @@ select[multiple] {
   border-radius: 4px;
   margin-right: 1rem;
   width: 200px;
-}
-/* Filter Styling*/
-.filter-input {
-  padding: 0.5rem;
-  font-size: 1rem;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  margin-right: 0.5rem;
-  width: 100px;
-}
-
-.filter-button {
-  padding: 0.5rem 1rem;
-  font-size: 1rem;
-  background-color: #0073e6;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-.filter-button:hover {
-  background-color: #005bb5;
 }
 
 /* Styling für Add Kategorie Seite*/
@@ -511,21 +456,6 @@ iframe {
 .delete-button:hover {
   background-color: #c82333;
 }
-
-.add-category-button {
-  display: inline-block;
-  padding: 0.5rem 1rem;
-  background-color: #28a745;
-  color: #fff;
-  text-decoration: none;
-  border-radius: 4px;
-  font-size: 1rem;
-}
-
-.add-category-button:hover {
-  background-color: #218838;
-}
-
 
 /* Allgemeines Styling für Header-Buttons */
 header button, header a.add-person-button, header a.add-category-button, header a.login-button, header a.register-button {
