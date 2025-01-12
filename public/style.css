@@ -525,3 +525,50 @@ iframe {
 .add-category-button:hover {
   background-color: #218838;
 }
+
+
+/* Allgemeines Styling für Header-Buttons */
+header button, header a.add-person-button, header a.add-category-button, header a.login-button, header a.register-button {
+  display: inline-block;
+  padding: 0.6rem 1.2rem;
+  font-size: 0.9rem;
+  font-weight: bold;
+  color: white;
+  background-color: #007BFF; /* Hauptfarbe */
+  border: none;
+  border-radius: 8px;
+  text-decoration: none;
+  text-align: center;
+  transition: background-color 0.2s, transform 0.2s;
+  cursor: pointer;
+}
+
+header button:hover, header a.add-person-button:hover, header a.add-category-button:hover, header a.login-button:hover, header a.register-button:hover {
+  background-color: #005BB5; /* Dunklere Hauptfarbe */
+  transform: translateY(-2px); /* Leichter Hover-Effekt */
+}
+
+/* Individuelles Styling für Buttons */
+#logoutButton {
+  background-color: #DC3545; /* Rot für Logout */
+}
+
+#logoutButton:hover {
+  background-color: #C82333;
+}
+
+.add-person-button, .add-category-button {
+  background-color: #28A745; /* Grün für Hinzufügen */
+}
+
+.add-person-button:hover, .add-category-button:hover {
+  background-color: #218838;
+}
+
+.login-button, .register-button {
+  background-color: #FFC107; /* Gelb für Login und Registrierung */
+}
+
+.login-button:hover, .register-button:hover {
+  background-color: #FFD54F;
+}
