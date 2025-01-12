@@ -136,34 +136,43 @@ main {
   justify-content: space-between;
   width: 100%;
   padding: 0.5rem 1rem;
-  border-top: 1px solid #ddd;
+  border-top: 1px solid #E0E0E0;
+  background-color: #F7F7F7; /* Dezenter Hintergrund für Button-Bereich */
+  border-radius: 0 0 12px 12px; /* Rundung passend zur Card */
 }
 
-.edit-button,
-.delete-button {
-  display: inline-block;
-  padding: 0.5rem 0.75rem;
+.edit-button, .delete-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48%; /* Beide Buttons nehmen gleich viel Platz ein */
+  padding: 0.6rem 0;
   border: none;
-  border-radius: 4px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: bold;
   cursor: pointer;
-  font-size: 0.85rem;
-  color: #fff;
-}
-
-.edit-button {
-  background-color: #28a745;
+  color: #FFFFFF;
+  transition: transform 0.2s, background-color 0.2s;
 }
 
 .edit-button:hover {
-  background-color: #218838;
+  background-color: #FFD54F;
+  transform: translateY(-2px); /* Leichter Schwebeeffekt */
+}
+
+.edit-button:hover {
+  background-color: #FFD54F;
+  transform: translateY(-2px); /* Leichter Schwebeeffekt */
 }
 
 .delete-button {
-  background-color: #dc3545;
+  background-color: #DC3545; /* Warnfarbe Rot */
 }
 
 .delete-button:hover {
-  background-color: #c82333;
+  background-color: #C82333;
+  transform: translateY(-2px);
 }
 
 @media (max-width: 1024px) {
