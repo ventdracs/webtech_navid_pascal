@@ -205,7 +205,7 @@ main {
   flex-direction: column;
   align-items: left;
   padding: 2rem;
-  text-align: left;
+  text-align: center;
 }
 
 .person-image-large {
@@ -213,6 +213,10 @@ main {
   height: auto;
   border-radius: 0%;
   margin-bottom: 1.5rem;
+  position: absolute;
+  left: 0; /* Positioniert das Bild an der linken Seite des Containers */
+  top: 50%; /* Optional: vertikale Zentrierung */
+  transform: translateY(-50%); /* Optional: vertikale Anpassung */
 }
 
 .person-detail h2 {
