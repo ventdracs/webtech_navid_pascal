@@ -203,9 +203,11 @@ main {
 .person-detail {
   display: flex;
   flex-direction: column;
-  align-items: left;
+  align-items: center;
   padding: 2rem;
   text-align: center;
+  gap: 2rem;
+  padding: 2rem;
 }
 
 .person-image-large {
@@ -218,19 +220,27 @@ main {
   top: 50%; /* Optional: vertikale Zentrierung */
   transform: translateY(-50%); /* Optional: vertikale Anpassung */
 }
+.person-detail-text {
+  background-color: #ffffff; /* Weicher Hintergrund wie Karte */
+  border: 1px solid #e0e0e0;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  flex: 1; /* Textbox nimmt den Rest des Platzes ein */
+}
 
-.person-detail h2 {
+.person-detail-text h2 {
   font-size: 2rem;
+  color: #007bff; /* Akzentfarbe */
   margin-bottom: 1rem;
 }
 
-.person-detail ul {
-  list-style: none;
+.person-detail-text ul {
+  list-style: none; /* Entfernt Punkte */
   padding: 0;
-  margin: 1rem 0;
 }
 
-.person-detail li {
+.person-detail-text li {
   font-size: 1.25rem;
   margin: 0.5rem 0;
 }
