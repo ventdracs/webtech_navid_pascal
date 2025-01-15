@@ -452,12 +452,13 @@ select[multiple] {
 /* Styling für Add Kategorie Seite*/
 .category-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); /* 4 pro Reihe */
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* Maximal 4 pro Reihe */
   gap: 1rem;
-  margin-top: 1.5rem;
+  margin-top: 1.5rem; /* Abstand zum Formular */
   padding: 1rem;
-  max-height: calc(100vh - 200px); /* Platz für Header und Footer */
-  overflow-y: auto;
+  width: 100%;
+  overflow-y: auto; /* Scrollbar aktivieren */
+  max-height: calc(100vh - 250px); /* Platz für Header, Footer und Formular */
 }
 
 .category-grid .person-card {
