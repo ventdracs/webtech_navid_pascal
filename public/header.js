@@ -14,57 +14,80 @@ function setupHeader() {
     const token = localStorage.getItem('token');
 
     // Login-Status prüfen
-    if (token) {
+    const loggedInUserElement = document.getElementById('loggedInUser');
+    if (token && loggedInUserElement) {
         const username = localStorage.getItem('username');
-        document.getElementById('loggedInUser').textContent = `Hallo, ${username}`;
-        document.getElementById('logoutButton').style.display = 'block';
-        document.getElementById('loginButton').style.display = 'none';
-        document.getElementById('registerButton').style.display = 'none';
-        document.querySelector('.add-category-button').style.display = 'inline-block';
+        loggedInUserElement.textContent = `Hallo, ${username}`;
+        const logoutButton = document.getElementById('logoutButton');
+        const loginButton = document.getElementById('loginButton');
+        const registerButton = document.getElementById('registerButton');
+        const addCategoryButton = document.querySelector('.add-category-button');
+
+        if (logoutButton) logoutButton.style.display = 'block';
+        if (loginButton) loginButton.style.display = 'none';
+        if (registerButton) registerButton.style.display = 'none';
+        if (addCategoryButton) addCategoryButton.style.display = 'inline-block';
     } else {
-        document.getElementById('loginButton').style.display = 'block';
-        document.getElementById('registerButton').style.display = 'block';
+        const loginButton = document.getElementById('loginButton');
+        const registerButton = document.getElementById('registerButton');
+        if (loginButton) loginButton.style.display = 'block';
+        if (registerButton) registerButton.style.display = 'block';
     }
 
     // Logout-Funktionalität
-    document.getElementById('logoutButton').addEventListener('click', () => {
-        localStorage.removeItem('token');
-        localStorage.removeItem('username');
-        window.location.reload();
-    });
+    const logoutButton = document.getElementById('logoutButton');
+    if (logoutButton) {
+        logoutButton.addEventListener('click', () => {
+            localStorage.removeItem('token');
+            localStorage.removeItem('username');
+            window.location.reload();
+        });
+    }
 
     // Suche und Filter
-    document.getElementById('searchInput').addEventListener('keydown', (event) => {
-        if (event.key === 'Enter') {
-            const searchTerm = event.target.value;
-            const queryParams = new URLSearchParams({ search: searchTerm });
+    const searchInput = document.getElementById('searchInput');
+    if (searchInput) {
+        searchInput.addEventListener('keydown', (event) => {
+            if (event.key === 'Enter') {
+                const searchTerm = event.target.value;
+                const queryParams = new URLSearchParams({ search: searchTerm });
+                window.location.href = `search-results.html?${queryParams}`;
+            }
+        });
+    }
+
+    const filterButton = document.getElementById('filterButton');
+    if (filterButton) {
+        filterButton.addEventListener('click', () => {
+            const minAge = document.getElementById('minAge')?.value.trim();
+            const maxAge = document.getElementById('maxAge')?.value.trim();
+            const searchTerm = document.getElementById('searchInput')?.value.trim();
+
+            const queryParams = new URLSearchParams();
+
+            if (searchTerm) queryParams.append('search', searchTerm);
+            if (minAge) queryParams.append('minAge', minAge);
+            if (maxAge) queryParams.append('maxAge', maxAge);
+
             window.location.href = `search-results.html?${queryParams}`;
-        }
-    });
-
-    document.getElementById('filterButton').addEventListener('click', () => {
-        const minAge = document.getElementById('minAge').value.trim();
-        const maxAge = document.getElementById('maxAge').value.trim();
-        const searchTerm = document.getElementById('searchInput').value.trim();
-
-        const queryParams = new URLSearchParams();
-
-        if (searchTerm) queryParams.append('search', searchTerm);
-        if (minAge) queryParams.append('minAge', minAge);
-        if (maxAge) queryParams.append('maxAge', maxAge);
-
-        window.location.href = `search-results.html?${queryParams}`;
-    });
+        });
+    }
 
     // Personenliste laden
-    loadPersons();
+    if (document.getElementById('peopleGrid')) {
+        loadPersons();
+    }
 }
 
 async function loadPersons() {
     try {
         const response = await fetch('/api/person');
+        if (!response.ok) throw new Error(`API-Fehler: ${response.statusText}`);
+
         const persons = await response.json();
         const peopleGrid = document.getElementById('peopleGrid');
+        if (!peopleGrid) return;
+
         peopleGrid.innerHTML = '';
 
         persons.forEach(person => {
@@ -90,3 +113,6 @@ async function loadPersons() {
         console.error('Fehler beim Laden der Personen:', error);
     }
 }
+
+// Lade den Header beim Start der Seite
+loadHeader();
