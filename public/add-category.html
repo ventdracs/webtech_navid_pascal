@@ -33,7 +33,7 @@
             <button type="submit">Hinzufügen</button>
         </form>
 
-        <div id="categoryList" class="category-list">
+        <div id="categoryList" class="category-grid">
             <!-- Kategorien werden hier dynamisch geladen -->
         </div>
     </main>
@@ -68,30 +68,30 @@
     
         // Kategorien laden
         async function loadCategories() {
-            try {
-                const response = await fetch(categoryApiUrl);
-                const categories = await response.json();
-                const categoryList = document.getElementById('categoryList');
-                categoryList.innerHTML = '';
-    
-                categories.forEach(category => {
-                    const categoryCard = `
-                        <div class="person-card">
-                            <h2>${category.name}</h2>
-                            <p>Anzahl der Personen: ${category.count}</p>
-                            ${localStorage.getItem('token') ? `
-                            <button class="edit-button" data-id="${category.id}">Bearbeiten</button>
-                            <button class="delete-button" data-id="${category.id}">Löschen</button>
-                            ` : ''}
-                        </div>
-                    `;
-                    categoryList.innerHTML += categoryCard;
-                });
-            } catch (error) {
-                console.error('Fehler beim Laden der Kategorien:', error);
-                alert('Kategorien konnten nicht geladen werden.');
-            }
-        }
+    try {
+        const response = await fetch(categoryApiUrl);
+        const categories = await response.json();
+        const categoryList = document.getElementById('categoryList');
+        categoryList.innerHTML = '';
+
+        categories.forEach(category => {
+            const categoryCard = document.createElement('div');
+            categoryCard.className = 'person-card';
+            categoryCard.innerHTML = `
+                <h2>${category.name}</h2>
+                <p>Anzahl der Personen: ${category.count}</p>
+                ${localStorage.getItem('token') ? `
+                <button class="edit-button" data-id="${category.id}">Bearbeiten</button>
+                <button class="delete-button" data-id="${category.id}">Löschen</button>
+                ` : ''}
+            `;
+            categoryList.appendChild(categoryCard);
+        });
+    } catch (error) {
+        console.error('Fehler beim Laden der Kategorien:', error);
+        alert('Kategorien konnten nicht geladen werden.');
+    }
+}
     
         // Event-Listener für Hinzufügen, Bearbeiten und Löschen
         document.getElementById('addCategoryForm').addEventListener('submit', async (event) => {
