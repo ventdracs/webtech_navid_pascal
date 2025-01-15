@@ -10,14 +10,21 @@
 <body>
     <div id="global-header"></div>
     <main>
-        <form id="registerForm" class="person-form">
+        <section class="contact-form">
             <h2>Registrierung</h2>
-            <input type="text" id="username" placeholder="Benutzername" required />
-            <input type="password" id="password" placeholder="Passwort" required />
-            <button type="submit">Registrieren</button>
-        </form>
-        <p>Bereits einen Account? <a href="login.html">Hier einloggen</a></p>
-    </main>
+            <form id="registerForm">
+                <div class="form-group">
+                    <label for="username">Benutzername:</label>
+                    <input type="text" id="username" placeholder="Benutzername" required />
+                </div>
+                <div class="form-group">
+                    <label for="password">Passwort:</label>
+                    <input type="password" id="password" placeholder="Passwort" required />
+                </div>
+                <button type="submit">Registrieren</button>
+            </form>
+            <p>Bereits einen Account? <a href="login.html">Hier einloggen</a></p>
+        </section>
     <footer>
         <p><a href="Impressum.html">Impressum</a> | <a href="Kontakt.html">Kontakt</a></p>
     </footer>
