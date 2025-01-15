@@ -222,6 +222,11 @@ main {
   border-radius: 12px;
   padding: 1.5rem;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Zentriert horizontal */
+  justify-content: center; /* Zentriert vertikal */
+  text-align: center; /* Textzentrierung */
   flex: 1; /* Textbox nimmt den Rest des Platzes ein */
 }
 
