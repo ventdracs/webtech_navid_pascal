@@ -58,11 +58,11 @@
   <div class="person-detail-text">
     <h2>${person.name}</h2>
     <ul>
-      <li><strong>Alter:</strong> ${person.age}</li>
-      <li><strong>Größe:</strong> ${person.height} cm</li>
-      <li><strong>Haarfarbe:</strong> ${categories}</li>
-    </ul>
-    <a href="index.html" class="back-link">Zurück zur Übersicht</a>
+      <div class="action-buttons">
+        <a href="edit-person.html?id=${person.id}" class="edit-button">Bearbeiten</a>
+        <a href="index.html" class="back-link">Zurück zur Übersicht</a>
+        <button class="delete-button" onclick="deletePerson(${person.id})">Löschen</button>
+    </div>
   </div>
 `;
 
@@ -108,6 +108,32 @@
             window.location.href = `search-results.html?${queryParams}`;
         }
     });
+    async function deletePerson(personId) {
+    if (!confirm('Möchten Sie diese Person wirklich löschen?')) return;
+
+    try {
+        const token = localStorage.getItem('token');
+        const response = await fetch(`${apiUrl}/${personId}`, {
+            method: 'DELETE',
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
+
+        if (response.ok) {
+            alert('Person erfolgreich gelöscht!');
+            window.location.href = 'index.html';
+        } else {
+            alert('Fehler beim Löschen der Person.');
+        }
+    } catch (error) {
+        console.error('Fehler beim Löschen der Person:', error);
+        alert('Ein Fehler ist aufgetreten.');
+    }
+}
+
+
+
     </script>
 </body>
 </html>
