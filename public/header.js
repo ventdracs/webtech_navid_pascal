@@ -55,6 +55,38 @@ function setupHeader() {
 
         window.location.href = `search-results.html?${queryParams}`;
     });
+
+    // Personenliste laden
+    loadPersons();
 }
 
-loadHeader();
+async function loadPersons() {
+    try {
+        const response = await fetch('/api/person');
+        const persons = await response.json();
+        const peopleGrid = document.getElementById('peopleGrid');
+        peopleGrid.innerHTML = '';
+
+        persons.forEach(person => {
+            const categories = person.categories ? person.categories.join(', ') : 'Keine Kategorien';
+            const personCard = `
+                <div class="person-card-container">
+                    <a href="person.html?id=${person.id}" class="person-card">
+                        <div class="person-image-container">
+                            <img src="${person.image}" alt="Foto von ${person.name}" class="person-image">
+                        </div>
+                        <div class="person-info">
+                            <h2>${person.name}</h2>
+                            <p><strong>Alter:</strong> ${person.age}</p>
+                            <p><strong>Größe:</strong> ${person.height} cm</p>
+                            <p><strong>Kategorien:</strong> ${categories}</p>
+                        </div>
+                    </a>
+                </div>
+            `;
+            peopleGrid.innerHTML += personCard;
+        });
+    } catch (error) {
+        console.error('Fehler beim Laden der Personen:', error);
+    }
+}
