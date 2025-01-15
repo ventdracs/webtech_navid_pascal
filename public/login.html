@@ -9,13 +9,23 @@
 </head>
 <body>
     <div id="global-header"></div>
-    <form id="loginForm" class="person-form">
-        <h2>Login</h2>
-        <input type="text" id="username" placeholder="Benutzername" required />
-        <input type="password" id="password" placeholder="Passwort" required />
-        <button type="submit">Einloggen</button>
-    </form>
-
+    <main>
+        <section class="contact-form">
+            <h2>Login</h2>
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="username">Benutzername:</label>
+                    <input type="text" id="username" placeholder="Benutzername" required />
+                </div>
+                <div class="form-group">
+                    <label for="password">Passwort:</label>
+                    <input type="password" id="password" placeholder="Passwort" required />
+                </div>
+                <button type="submit">Einloggen</button>
+            </form>
+            <p>Noch keinen Account? <a href="register.html">Hier registrieren</a></p>
+        </section>
+    </main>
     <footer>
         <p><a href="Impressum.html">Impressum</a> | <a href="Kontakt.html">Kontakt</a></p>
     </footer>
