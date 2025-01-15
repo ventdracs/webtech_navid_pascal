@@ -33,27 +33,59 @@
                     ? person.categories.join(', ')
                     : 'Keine Kategorien';
 
-                    personDetail.innerHTML = `
-  <img src="${person.image}" alt="Foto von ${person.name}" class="person-image-large" />
-  <div class="person-detail-text">
-    <h2>${person.name}</h2>
-    <ul>
-      <li><strong>Alter:</strong> ${person.age}</li>
-      <li><strong>Größe:</strong> ${person.height} cm</li>
-      <li><strong>Haarfarbe:</strong> ${categories}</li>
-    </ul>
-     <div class="action-buttons">
-        <a href="edit-person.html?id=${person.id}" class="edit-button">Bearbeiten</a>
-        <a href="index.html" class="back-link">Zurück zur Übersicht</a>
-        <button class="delete-button" onclick="deletePerson(${person.id})">Löschen</button>
-    </div>
-  </div>
-`;
+                personDetail.innerHTML = `
+                    <img src="${person.image}" alt="Foto von ${person.name}" class="person-image-large" />
+                    <div class="person-detail-text">
+                        <h2>${person.name}</h2>
+                        <ul>
+                            <li><strong>Alter:</strong> ${person.age}</li>
+                            <li><strong>Größe:</strong> ${person.height} cm</li>
+                            <li><strong>Haarfarbe:</strong> ${categories}</li>
+                        </ul>
+                        <div class="action-buttons">
+                            <a href="edit-person.html?id=${person.id}" class="edit-button">Bearbeiten</a>
+                            <a href="index.html" class="back-link">Zurück zur Übersicht</a>
+                            <button class="delete-button">Löschen</button>
+                        </div>
+                    </div>
+                `;
+
+                // Event-Listener für den Lösch-Button hinzufügen
+                const deleteButton = document.querySelector('.delete-button');
+                if (deleteButton) {
+                    deleteButton.addEventListener('click', async () => {
+                        if (confirm('Möchten Sie diese Person wirklich löschen?')) {
+                            await deletePerson(personId);
+                            window.location.href = 'index.html'; // Nach dem Löschen zurück zur Übersicht
+                        }
+                    });
+                }
             } catch (error) {
                 console.error('Fehler beim Laden der Personendetails:', error);
             }
         }
+
+        async function deletePerson(id) {
+            try {
+                const token = localStorage.getItem('token');
+                const response = await fetch(`${apiUrl}/${id}`, {
+                    method: 'DELETE',
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error('Fehler beim Löschen der Person');
+                }
+            } catch (error) {
+                console.error('Fehler beim Löschen:', error);
+            }
+        }
+
+        // Details der Person laden
         loadPersonDetails();
     </script>
+
 </body>
 </html>
