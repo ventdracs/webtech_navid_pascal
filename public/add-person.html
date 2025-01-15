@@ -30,18 +30,24 @@
 
   <main>
     <form id="addPersonForm" class="person-form">
-      <h2>Neue Person hinzufügen</h2>
-      <input type="text" id="name" placeholder="Name" required />
-      <input type="number" id="age" placeholder="Alter" required />
-      <input type="number" id="height" placeholder="Größe in cm" required />
-      
-      <label for="categories">Kategorien auswählen:</label>
-      <select id="categories" multiple>
-        <!-- Dynamisch geladene Kategorien -->
-      </select>
-      
-      <button type="submit">Hinzufügen</button>
-    </form>
+        <h2>Neue Person hinzufügen</h2>
+        <div class="form-group">
+          <input type="text" id="name" placeholder="Name" required />
+        </div>
+        <div class="form-group">
+          <input type="number" id="age" placeholder="Alter" required />
+        </div>
+        <div class="form-group">
+          <input type="number" id="height" placeholder="Größe in cm" required />
+        </div>
+        <div class="form-group">
+          <label for="categories">Kategorien auswählen:</label>
+          <div id="categories" class="checkbox-group">
+            <!-- Dynamisch geladene Kategorien mit Checkboxen -->
+          </div>
+        </div>
+        <button type="submit">Hinzufügen</button>
+      </form>
   </main>
 
   <footer>
@@ -80,22 +86,25 @@
 
     // Kategorien laden
     async function loadCategories() {
-        try {
-            const response = await fetch('/api/categories');
-            const categories = await response.json();
-            const categorySelect = document.getElementById('categories');
-            categorySelect.innerHTML = '';
+    try {
+        const response = await fetch('/api/categories');
+        const categories = await response.json();
+        const categoryContainer = document.getElementById('categories');
+        categoryContainer.innerHTML = '';
 
-            categories.forEach(category => {
-                const option = document.createElement('option');
-                option.value = category.id;
-                option.textContent = category.name;
-                categorySelect.appendChild(option);
-            });
-        } catch (error) {
-            console.error('Fehler beim Laden der Kategorien:', error);
-        }
+        categories.forEach(category => {
+            const checkbox = document.createElement('div');
+            checkbox.className = 'checkbox-item';
+            checkbox.innerHTML = `
+                <input type="checkbox" id="category-${category.id}" value="${category.id}" />
+                <label for="category-${category.id}">${category.name}</label>
+            `;
+            categoryContainer.appendChild(checkbox);
+        });
+    } catch (error) {
+        console.error('Fehler beim Laden der Kategorien:', error);
     }
+}
 
     // Personen hinzufügen
     document.getElementById('addPersonForm').addEventListener('submit', async (event) => {

@@ -326,40 +326,33 @@ button[type="submit"]:hover {
 
 /* Sytyling für add-person Seite
 */
-.person-form {
-  max-width: 500px;
-  margin: 2rem auto;
-  padding: 2rem;
-  background-color: #f8f8f8;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+.form-group {
+  margin-bottom: 1.5rem;
 }
 
-.person-form h2 {
-  text-align: center;
-  margin-bottom: 1rem;
-}
-
-.person-form input {
+.form-group input {
   width: 100%;
   padding: 0.75rem;
-  margin-bottom: 1rem;
   border: 1px solid #ddd;
   border-radius: 4px;
+  font-size: 1rem;
 }
 
-.person-form button {
-  width: 100%;
-  padding: 0.75rem;
-  background-color: #0073e6;
-  color: #fff;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
+.checkbox-group {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 0.5rem;
 }
 
-.person-form button:hover {
-  background-color: #005bb5;
+.checkbox-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.checkbox-item input[type="checkbox"] {
+  width: 1.2rem;
+  height: 1.2rem;
 }
 
 /* Header Logo link styling*/
