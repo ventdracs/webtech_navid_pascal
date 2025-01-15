@@ -254,6 +254,53 @@ main {
 .back-link:hover {
   background-color: #005bb5;
 }
+.action-buttons {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem; /* Abstand zwischen den Buttons */
+  margin-top: 1rem;
+  flex-wrap: nowrap; /* Verhindert Zeilenumbruch */
+}
+
+.action-buttons a,
+.action-buttons button {
+  flex: 1 1 30%; /* Alle Buttons nehmen denselben Platz ein */
+  max-width: 150px; /* Maximale Breite für jeden Button */
+  padding: 0.5rem;
+  text-align: center;
+  font-size: 0.9rem;
+  border-radius: 4px;
+  text-decoration: none;
+  color: white;
+}
+
+.edit-button {
+  background-color: #ffc107;
+}
+
+.edit-button:hover {
+  background-color: #e0a800;
+}
+
+.back-link {
+  background-color: #007bff;
+}
+
+.back-link:hover {
+  background-color: #0056b3;
+}
+
+.delete-button {
+  background-color: #dc3545;
+}
+
+.delete-button:hover {
+  background-color: #c82333;
+}
+
+
+
 
 /* Style für Kontaktformular
 */
