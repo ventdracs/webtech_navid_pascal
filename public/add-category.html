@@ -28,28 +28,6 @@
     <script>
          function setupPage() {
         const categoryApiUrl = '/api/categories';
-    /*
-        // Login-Status beim Laden der Seite prüfen
-        document.addEventListener('DOMContentLoaded', () => {
-            const token = localStorage.getItem('token');
-            if (token) {
-                const username = localStorage.getItem('username');
-                document.getElementById('loggedInUser').textContent = `Hallo, ${username}`;
-                document.getElementById('logoutButton').style.display = 'block';
-                document.getElementById('loginButton').style.display = 'none';
-                document.getElementById('registerButton').style.display = 'none';
-                document.querySelector('.add-category-button').style.display = 'inline-block';
-    
-                const addCategoryButton = document.querySelector('.add-category-button');
-                if (addCategoryButton) {
-                    addCategoryButton.style.display = 'inline-block';
-                }
-            } else {
-                document.getElementById('loginButton').style.display = 'block';
-                document.getElementById('registerButton').style.display = 'block';
-            }
-        });*/
-    
         // Kategorien laden
         async function loadCategories() {
     try {
@@ -152,30 +130,6 @@
                 }
             }
         });
-    /*
-        // Event-Listener für Suchfeld
-        document.getElementById('searchInput').addEventListener('keydown', (event) => {
-            if (event.key === 'Enter') {
-                const searchTerm = event.target.value.trim();
-                if (searchTerm) {
-                    const queryParams = new URLSearchParams({ search: searchTerm });
-                    window.location.href = `search-results.html?${queryParams}`;
-                } else {
-                    alert('Bitte geben Sie einen Suchbegriff ein.');
-                }
-            }
-        });
-
-        // Logout-Button Funktionalität
-document.getElementById('logoutButton').addEventListener('click', () => {
-    // Token und Benutzername aus localStorage entfernen
-    localStorage.removeItem('token');
-    localStorage.removeItem('username');
-    
-    // Seite neu laden, um den Login-Status zu aktualisieren
-    window.location.reload();
-});*/
-    
         // Kategorien laden beim Start
         loadCategories();
     }
