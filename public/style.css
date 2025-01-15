@@ -599,24 +599,29 @@ iframe {
 
 .impressum-container {
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap; /* Verhindert Umbruch */
   gap: 2rem;
-  justify-content: space-between;
-  align-items: flex-start;
+  align-items: stretch; /* Elemente auf gleiche Höhe ausrichten */
 }
 
 .impressum-text {
-  flex: 1 1 45%; /* 45% Breite auf großen Bildschirmen */
+  flex: 1 1 auto; /* Passt sich dynamisch an die Höhe an */
   max-width: 600px;
 }
 
 .map-container {
-  flex: 1 1 50%; /* Breiterer Bereich für die Karte */
-  max-width: 700px; /* Maximale Breite erhöhen */
-  height: 500px; /* Höhe der Karte vergrößern */
+  flex: 1 1 50%; /* Breite der Karte */
+  max-width: 700px; /* Maximale Breite */
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: stretch; /* Karte wird gestreckt */
+}
+
+.map-container iframe {
+  width: 100%; /* Füllt den Container aus */
+  height: 100%; /* Füllt die Höhe des Containers */
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 @media (max-width: 768px) {
