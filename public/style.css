@@ -640,3 +640,28 @@ iframe {
 .impressum-text p {
   margin-bottom: 2rem; /* Größerer Abstand zwischen den Abschnitten */
 }
+
+/* Login-, Register- und Logout-Buttons */
+#auth a, #auth button {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  margin: 0 0.5rem; /* Abstand zwischen den Buttons */
+  background-color: #007BFF; /* Primärfarbe */
+  color: white;
+  text-decoration: none;
+  font-size: 1rem;
+  font-weight: bold;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.2s;
+}
+
+#auth a:hover, #auth button:hover {
+  background-color: #0056b3; /* Dunklere Variante bei Hover */
+  transform: scale(1.05); /* Leichter Zoom-Effekt */
+}
+
+#auth button {
+  font-family: 'Poppins', sans-serif;
+}
