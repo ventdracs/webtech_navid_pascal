@@ -110,7 +110,7 @@ async function loadPersons() {
                             <h2>${person.name}</h2>
                             <p><strong>Alter:</strong> ${person.age}</p>
                             <p><strong>Größe:</strong> ${person.height} cm</p>
-                            <p><strong>Kategorien:</strong> ${categories}</p>
+                            <p><strong>Haarfarbe:</strong> ${categories}</p>
                         </div>
                     </a>
                     ${token ? `
