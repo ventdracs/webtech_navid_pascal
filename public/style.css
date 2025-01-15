@@ -594,3 +594,34 @@ iframe {
 .add-category-button:hover {
   background-color: #218838;
 }
+
+/* Impressum Styling*/ 
+
+.impressum-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.impressum-text {
+  flex: 1 1 45%; /* 45% Breite auf großen Bildschirmen */
+  max-width: 600px;
+}
+
+.map-container {
+  flex: 1 1 45%; /* 45% Breite auf großen Bildschirmen */
+  max-width: 600px;
+  height: 400px; /* Feste Höhe für die Karte */
+}
+
+@media (max-width: 768px) {
+  .impressum-container {
+    flex-direction: column; /* Vertikal auf kleinen Bildschirmen */
+  }
+
+  .impressum-text, .map-container {
+    flex: 1 1 100%;
+  }
+}
