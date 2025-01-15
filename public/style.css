@@ -41,13 +41,13 @@ header h1 {
 
 main {
   display: flex;
-  justify-content: center;
-  align-items: flex-start; /* Inhalt beginnt oben */
-  min-height: calc(100vh - 140px); /* Platz für Header und Footer */
+  flex-direction: column; /* Elemente vertikal anordnen */
+  align-items: center;
+  justify-content: flex-start;
   padding: 2rem;
-  overflow-y: auto; /* Ermöglicht Scrollen */
+  gap: 2rem; /* Abstand zwischen Formular und Kategorien */
+  overflow-y: auto;
 }
-
 
 /* Style für PLP
 */
