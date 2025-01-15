@@ -27,11 +27,13 @@ function setupHeader() {
         const loginButton = document.getElementById('loginButton');
         const registerButton = document.getElementById('registerButton');
         const addCategoryButton = document.querySelector('.add-category-button');
+        const addPersonButton = document.querySelector('.add-person-button');
 
         if (logoutButton) logoutButton.style.display = 'block';
         if (loginButton) loginButton.style.display = 'none';
         if (registerButton) registerButton.style.display = 'none';
         if (addCategoryButton) addCategoryButton.style.display = 'inline-block';
+        if (addPersonButton) addPersonButton.style.display = 'inline-block';
     } else {
         const loginButton = document.getElementById('loginButton');
         const registerButton = document.getElementById('registerButton');
