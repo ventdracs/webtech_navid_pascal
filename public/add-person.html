@@ -115,8 +115,8 @@
             return;
         }
 
-        const selectedCategories = Array.from(document.getElementById('categories').selectedOptions)
-            .map(option => option.value);
+        const selectedCategories = Array.from(document.querySelectorAll('#categories input[type="checkbox"]:checked'))
+    .map(checkbox => checkbox.value);
 
         const newPerson = {
             name: document.getElementById('name').value,
