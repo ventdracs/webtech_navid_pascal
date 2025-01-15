@@ -25,8 +25,9 @@
     </footer>
 
     <script>
+         function setupPage() {
         const categoryApiUrl = '/api/categories';
-    
+    /*
         // Login-Status beim Laden der Seite prüfen
         document.addEventListener('DOMContentLoaded', () => {
             const token = localStorage.getItem('token');
@@ -46,7 +47,7 @@
                 document.getElementById('loginButton').style.display = 'block';
                 document.getElementById('registerButton').style.display = 'block';
             }
-        });
+        });*/
     
         // Kategorien laden
         async function loadCategories() {
@@ -150,7 +151,7 @@
                 }
             }
         });
-    
+    /*
         // Event-Listener für Suchfeld
         document.getElementById('searchInput').addEventListener('keydown', (event) => {
             if (event.key === 'Enter') {
@@ -172,10 +173,11 @@ document.getElementById('logoutButton').addEventListener('click', () => {
     
     // Seite neu laden, um den Login-Status zu aktualisieren
     window.location.reload();
-});
+});*/
     
         // Kategorien laden beim Start
         loadCategories();
+    }
     </script>
     
     

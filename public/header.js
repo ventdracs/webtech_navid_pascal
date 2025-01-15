@@ -5,6 +5,11 @@ async function loadHeader() {
         document.getElementById('global-header').innerHTML = headerHTML;
 
         setupHeader(); // Initialisiert die Header-Funktionen
+
+        // Initialisiere Funktionen spezifisch für die Seite
+        if (typeof setupPage === 'function') {
+            setupPage(); // Ruft die spezifischen Funktionen für die Seite auf
+        }
     } catch (error) {
         console.error('Fehler beim Laden des Headers:', error);
     }
