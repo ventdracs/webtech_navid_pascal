@@ -25,36 +25,14 @@
     </footer>
 
     <script>
-        function setupPage() {
-        const personApiUrl = '/api/person';
-        const categoryApiUrl = '/api/categories';
-        const personId = new URLSearchParams(window.location.search).get('id');
-        const token = localStorage.getItem('token');
-
-        /*// Login-Status prüfen und entsprechend anzeigen
-        if (token) {
-            const username = localStorage.getItem('username');
-            document.getElementById('loggedInUser').textContent = `Hallo, ${username}`;
-            document.getElementById('logoutButton').style.display = 'block';
-            document.getElementById('loginButton').style.display = 'none';
-            document.getElementById('registerButton').style.display = 'none';
-            document.querySelector('.add-category-button').style.display = 'inline-block';
-        } else {
-            document.getElementById('loginButton').style.display = 'block';
-            document.getElementById('registerButton').style.display = 'block';
-        }
-
-        // Logout-Button Funktionalität
-        document.getElementById('logoutButton').addEventListener('click', () => {
-            localStorage.removeItem('token');
-            localStorage.removeItem('username');
-            window.location.reload();
-        });*/
-
         async function loadPersonAndCategories() {
+            const personId = new URLSearchParams(window.location.search).get('id');
+            const personApiUrl = `/api/person/${personId}`;
+            const categoryApiUrl = '/api/categories';
+
             try {
                 const [personResponse, categoryResponse] = await Promise.all([
-                    fetch(`${personApiUrl}/${personId}`),
+                    fetch(personApiUrl),
                     fetch(categoryApiUrl)
                 ]);
 
@@ -65,12 +43,19 @@
                 document.getElementById('age').value = person.age;
                 document.getElementById('height').value = person.height;
 
-                const categorySelect = document.getElementById('categories');
-                categorySelect.innerHTML = categories.map(cat => `
-                    <option value="${cat.id}" ${person.categories.includes(cat.name) ? 'selected' : ''}>
-                        ${cat.name}
-                    </option>
-                `).join('');
+                const categoryContainer = document.getElementById('categories');
+                categoryContainer.innerHTML = '';
+
+                categories.forEach(category => {
+                    const isChecked = person.categories.includes(category.name);
+                    const checkbox = document.createElement('div');
+                    checkbox.className = 'checkbox-item';
+                    checkbox.innerHTML = `
+                        <input type="checkbox" id="category-${category.id}" value="${category.id}" ${isChecked ? 'checked' : ''} />
+                        <label for="category-${category.id}">${category.name}</label>
+                    `;
+                    categoryContainer.appendChild(checkbox);
+                });
             } catch (error) {
                 console.error('Fehler beim Laden der Person oder Kategorien:', error);
             }
@@ -78,23 +63,38 @@
 
         document.getElementById('editPersonForm').addEventListener('submit', async (event) => {
             event.preventDefault();
-            const name = document.getElementById('name').value.trim();
-            const age = parseInt(document.getElementById('age').value, 10);
-            const height = parseInt(document.getElementById('height').value, 10);
-            const selectedCategories = Array.from(document.getElementById('categories').selectedOptions).map(opt => opt.value);
+
+            const personId = new URLSearchParams(window.location.search).get('id');
+            const personApiUrl = `/api/person/${personId}`;
+            const token = localStorage.getItem('token');
+
+            const selectedCategories = Array.from(document.querySelectorAll('#categories input[type="checkbox"]:checked'))
+                .map(checkbox => checkbox.value);
+
+            const updatedPerson = {
+                name: document.getElementById('name').value,
+                age: document.getElementById('age').value,
+                height: document.getElementById('height').value,
+                categories: selectedCategories
+            };
 
             try {
-                const token = localStorage.getItem('token');
-                await fetch(`${personApiUrl}/${personId}`, {
+                const response = await fetch(personApiUrl, {
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json',
-                        Authorization: `Bearer ${token}`,
+                        Authorization: `Bearer ${token}`
                     },
-                    body: JSON.stringify({ name, age, height, categories: selectedCategories }),
+                    body: JSON.stringify(updatedPerson)
                 });
-                alert('Änderungen gespeichert!');
-                window.location.href = 'index.html';
+
+                if (response.ok) {
+                    alert('Änderungen erfolgreich gespeichert!');
+                    window.location.href = 'index.html';
+                } else {
+                    const errorData = await response.json();
+                    alert(`Fehler: ${errorData.error}`);
+                }
             } catch (error) {
                 console.error('Fehler beim Speichern der Änderungen:', error);
                 alert('Änderungen konnten nicht gespeichert werden.');
@@ -102,7 +102,6 @@
         });
 
         loadPersonAndCategories();
-    }
     </script>
 </body>
 </html>
