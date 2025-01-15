@@ -5,27 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Person Bearbeiten</title>
     <link rel="stylesheet" href="style.css">
+    <script src="header.js" defer></script>
 </head>
 <body>
-    <header>
-        <a href="index.html">
-            <img class="logo" src="logo2.png" alt="Logo">
-        </a>
-        <h1>Justus Angels</h1>
-        <input type="text" id="searchInput" class="search-bar" placeholder="Suchen...">
-        <input type="number" id="minAge" class="filter-input" placeholder="Mindestalter">
-        <input type="number" id="maxAge" class="filter-input" placeholder="Maximalalter">
-        <button id="filterButton" class="filter-button">Filter</button>
-        <a href="add-person.html" class="add-person-button">Add Person</a>
-        <a href="add-category.html" class="add-category-button" style="display: none;">Add Category</a>
-        <div id="auth">
-            <span id="loggedInUser"></span>
-            <button id="logoutButton" style="display: none;">Logout</button>
-            <a href="login.html" id="loginButton" class="login-button">Login</a>
-            <a href="register.html" id="registerButton" class="register-button">Registrieren</a>
-        </div>
-    </header>
-
+    <div id="global-header"></div>
     <main>
         <form id="editPersonForm" class="person-form">
             <h2>Person Bearbeiten</h2>
@@ -42,12 +25,13 @@
     </footer>
 
     <script>
+        function setupPage() {
         const personApiUrl = '/api/person';
         const categoryApiUrl = '/api/categories';
         const personId = new URLSearchParams(window.location.search).get('id');
         const token = localStorage.getItem('token');
 
-        // Login-Status prüfen und entsprechend anzeigen
+        /*// Login-Status prüfen und entsprechend anzeigen
         if (token) {
             const username = localStorage.getItem('username');
             document.getElementById('loggedInUser').textContent = `Hallo, ${username}`;
@@ -65,7 +49,7 @@
             localStorage.removeItem('token');
             localStorage.removeItem('username');
             window.location.reload();
-        });
+        });*/
 
         async function loadPersonAndCategories() {
             try {
@@ -118,6 +102,7 @@
         });
 
         loadPersonAndCategories();
+    }
     </script>
 </body>
 </html>
