@@ -21,18 +21,20 @@ body {
 
 header {
   display: flex;
-  flex-wrap: wrap;
-  gap: 1rem 3rem;
   align-items: center;
+  justify-content: space-between; /* Elemente verteilen */
+  gap: 1rem; /* Abstand zwischen den Elementen */
   padding: 1rem;
   background-color: #007BFF;
   color: white;
   border-bottom: 1px solid #d8d8d8;
 }
 
-header .logo {
-  max-height: 6rem;
-  max-width: 6rem;
+#auth {
+  margin-left: auto; /* Verschiebt die Login-/Register-Buttons nach rechts */
+  display: flex;
+  gap: 0.5rem; /* Abstand zwischen den Buttons */
+  align-items: center;
 }
 
 header h1 {
