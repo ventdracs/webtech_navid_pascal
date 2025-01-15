@@ -81,6 +81,9 @@ function setupHeader() {
 
 async function loadPersons() {
     try {
+        const token = localStorage.getItem('token');
+        console.log('Token:', token); // Debugging
+
         const response = await fetch('/api/person');
         if (!response.ok) throw new Error(`API-Fehler: ${response.statusText}`);
 
@@ -105,12 +108,48 @@ async function loadPersons() {
                             <p><strong>Kategorien:</strong> ${categories}</p>
                         </div>
                     </a>
+                    ${token ? `
+                    <div class="card-actions">
+                        <a href="edit-person.html?id=${person.id}" class="edit-button">Bearbeiten</a>
+                        <button class="delete-button" data-id="${person.id}">Löschen</button>
+                    </div>` : ''}
                 </div>
             `;
             peopleGrid.innerHTML += personCard;
         });
+
+        // Event-Listener für Löschen-Button
+        if (token) {
+            document.querySelectorAll('.delete-button').forEach(button => {
+                button.addEventListener('click', async (event) => {
+                    const id = event.target.dataset.id;
+                    if (confirm('Möchten Sie diese Person wirklich löschen?')) {
+                        await deletePerson(id);
+                        loadPersons(); // Aktualisiert die Liste
+                    }
+                });
+            });
+        }
     } catch (error) {
         console.error('Fehler beim Laden der Personen:', error);
+    }
+}
+
+async function deletePerson(id) {
+    try {
+        const token = localStorage.getItem('token');
+        const response = await fetch(`/api/person/${id}`, {
+            method: 'DELETE',
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error('Fehler beim Löschen der Person');
+        }
+    } catch (error) {
+        console.error('Fehler beim Löschen:', error);
     }
 }
 
