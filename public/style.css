@@ -611,9 +611,12 @@ iframe {
 }
 
 .map-container {
-  flex: 1 1 45%; /* 45% Breite auf großen Bildschirmen */
-  max-width: 600px;
-  height: 400px; /* Feste Höhe für die Karte */
+  flex: 1 1 50%; /* Breiterer Bereich für die Karte */
+  max-width: 700px; /* Maximale Breite erhöhen */
+  height: 500px; /* Höhe der Karte vergrößern */
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 @media (max-width: 768px) {
@@ -624,4 +627,11 @@ iframe {
   .impressum-text, .map-container {
     flex: 1 1 100%;
   }
+}
+
+.impressum-text h3 {
+  margin-bottom: 1rem; /* Abstand unter der Überschrift */
+}
+.impressum-text p {
+  margin-bottom: 2rem; /* Größerer Abstand zwischen den Abschnitten */
 }
