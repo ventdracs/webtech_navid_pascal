@@ -1,13 +1,17 @@
+/* Optimierte Version des Stylesheets ohne das Entfernen von Funktionen */
+
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap');
 
-/* Globale Variablen */
 :root {
     --primary-color: #007BFF;
     --secondary-color: #FFC107;
     --danger-color: #DC3545;
-    --background-color: #FFFFFF;
+    --success-color: #28a745;
     --text-color: #343A40;
+    --background-color: #FFFFFF;
     --light-gray: #E0E0E0;
+    --box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    --transition-duration: 0.3s;
 }
 
 /* Reset */
@@ -27,7 +31,6 @@ body {
     line-height: 1.5;
 }
 
-/* Header */
 header {
     display: flex;
     align-items: center;
@@ -63,7 +66,7 @@ header h1 {
     cursor: pointer;
     text-decoration: none;
     font-weight: bold;
-    transition: background-color 0.3s, transform 0.2s;
+    transition: background-color var(--transition-duration), transform var(--transition-duration);
 }
 
 #auth a:hover, #auth button:hover {
@@ -71,7 +74,6 @@ header h1 {
     transform: scale(1.05);
 }
 
-/* Hauptbereich */
 main {
     display: flex;
     flex-direction: column;
@@ -82,7 +84,6 @@ main {
     overflow-y: auto;
 }
 
-/* Grid-System */
 .people-grid, .category-grid {
     display: grid;
     gap: 2rem;
@@ -99,14 +100,14 @@ main {
     grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
 }
 
-/* Karten */
 .card {
     background-color: var(--background-color);
     border: 1px solid var(--light-gray);
     border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: var(--box-shadow);
     text-align: center;
     padding: 1rem;
+    transition: transform var(--transition-duration), box-shadow var(--transition-duration);
 }
 
 .card:hover {
@@ -114,13 +115,24 @@ main {
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
 }
 
-/* Buttons */
+.person-info h2 {
+    font-size: 1.25rem;
+    margin: 0.5rem 0;
+    color: var(--primary-color);
+}
+
+.person-info p {
+    margin: 0.25rem 0;
+    font-size: 0.95rem;
+    color: #555;
+}
+
 button, a.button {
     padding: 0.5rem 1rem;
     border-radius: 4px;
     font-size: 1rem;
     cursor: pointer;
-    transition: background-color 0.3s;
+    transition: background-color var(--transition-duration);
 }
 
 .edit-button {
@@ -151,7 +163,20 @@ button, a.button {
     background-color: #05595d;
 }
 
-/* Formular */
+.contact-form {
+    max-width: 600px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background-color: #f8f8f8;
+    border-radius: 8px;
+    box-shadow: var(--box-shadow);
+}
+
+.contact-form h2 {
+    text-align: center;
+    margin-bottom: 1.5rem;
+}
+
 .form-group {
     margin-bottom: 1.5rem;
 }
@@ -164,7 +189,6 @@ button, a.button {
     font-size: 1rem;
 }
 
-/* Responsive Design */
 @media (max-width: 768px) {
     .people-grid, .category-grid {
         grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
