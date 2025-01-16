@@ -212,9 +212,11 @@ main {
 }
 
 .person-image-large {
-  width: 700px;
-  height: 450px;
-  border-radius: 0%;
+  width: 100%; /* Die Breite des Containers ausfüllen */
+  max-width: 700px; /* Maximale Breite */
+  aspect-ratio: 4 / 4; /* Seitenverhältnis 4:3 */
+  object-fit: cover; /* Zuschneiden, um das Verhältnis zu erhalten */
+  border-radius: 10px; /* Optional: Abrundung der Ecken */
   margin-bottom: 1.5rem;
 }
 
