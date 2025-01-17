@@ -8,7 +8,6 @@ const jwt = require('jsonwebtoken');
 const JWT_SECRET = process.env.JWT_SECRET || 'geheimratsecken';
 
 
-
 const app = express();
 const PORT = process.env.PORT || 3000;
 
